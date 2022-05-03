@@ -1,0 +1,88 @@
+{
+  "details": [
+    {
+      "id": 0,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/180/01800090703255.jpg",
+      "name": "Воздушный фильтр ALCO FILTER MD-8064",
+      "brand": "Honda",
+      "model": "Accord",
+      "price": 188,
+      "year": 2011,
+      "volume": "2.2",
+      "article": " 8719654",
+      "isNew": true
+    },
+    {
+      "id": 1,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/2/00020680203255.jpg ",
+      "name": "Щетка стеклоочистителя HELLA 9XW",
+      "brand": "Dodge",
+      "model": "Avenger",
+      "price": 292,
+      "year": 2017,
+      "volume": "3.6",
+      "article": "5629860",
+      "isNew": false
+    },
+    {
+      "id": 2,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/36/00360772801255.jpg",
+      "name": "Задний фонарь MERCEDES-BENZ A221",
+      "brand": "Mercedes S-Class ",
+      "model": "W221 S500",
+      "price": 6960,
+      "year": 2017,
+      "volume": " 3.6",
+      "article": "8200166",
+      "isNew": true
+    },
+    {
+      "id": 3,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/140/01400264301255.jpg",
+      "name": "Шкив коленвала CORTECO ",
+      "brand": "BMW",
+      "model": "X5",
+      "price": 14875,
+      "year": 2010,
+      "volume": "3.0",
+      "article": "80001419",
+      "isNew": true
+    },
+    {
+      "id": 4,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/134/01340600703255.jpg",
+      "name": "Наконечник рулевой тяги FD-ES-5108",
+      "brand": "Land Rover",
+      "model": "Freelander 2",
+      "price": 513,
+      "year": 2014,
+      "volume": "2.2",
+      "article": "1275421",
+      "isNew": true
+    },
+    {
+      "id": 5,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/4466/44660163503255.jpg",
+      "name": "Радиатор охлаждения двигателя",
+      "brand": "Land Rover",
+      "model": "Freelander 2",
+      "price": 1920,
+      "year": 2014,
+      "volume": "2.2",
+      "article": "3451871",
+      "isNew": true
+    },
+    {
+      "id": 6,
+      "imageUrl": "https://static.ukrparts.com.ua/media/images/32/00320204801255.jpg",
+      "name": "Подшипник коленвала SACHS",
+      "brand": "Volkswagen",
+      "model": "LT",
+      "price": 895,
+      "year": 2005,
+      "volume": "2.5",
+      "article": "2135211",
+      "isNew": false
+    }
+  ]
+}
