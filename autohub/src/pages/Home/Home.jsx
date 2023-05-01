@@ -5,24 +5,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchDetails } from '../../redux/actions/items';
 import { setCategory } from '../../redux/actions/header-categories';
 import { setFilter } from '../../redux/actions/filter';
-import {
-  truckPng,
-  truckWebp,
-  updatePng,
-  updateWebp,
-  headPhonesPng,
-  headPhonesWebp,
-  giftPng,
-  giftWebp,
-} from './images';
+
 
 export default function Home() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [inputBrand, changeInputBrand] = useState('');
-  const [inputModel, changeInputModel] = useState('');
-  const [inputArticle, changeInputArticle] = useState('');
-  const [inputEngineValue, changeInputEngineValue] = useState('');
+
+  const [inputDiametr, changeInputDiametr] = useState('');
+
+  const [inputWidth, changeInputWidth] = useState('');
+  const [inputProfile, changeInputProfile] = useState('');
   const { sortBy } = useSelector(({ sortBy }) => sortBy);
   const { items } = useSelector(({ details }) => {
     return {
@@ -31,11 +23,9 @@ export default function Home() {
   });
 
   const filters = {
-    brand: inputBrand,
-    model: inputModel,
-    article: inputArticle,
-    engine_value: inputEngineValue,
-    item: '',
+    diametr: inputDiametr,
+    width: inputWidth,
+    profile: inputProfile
   };
 
   useEffect(() => {
@@ -61,45 +51,36 @@ export default function Home() {
         <div className="container">
           <div className="search__body">
             <form action="server.php" className="search__form">
-              <h3 className="search__form--title">Пошук запчастин</h3>
+              <h3 className="search__form--title">Пошук шин</h3>
               <input
                 className="search__form--input"
                 type="text"
                 id="brand"
                 data-brand
-                placeholder="Марка"
-                onChange={(event) => changeInputBrand(event.target.value)}
-                value={inputBrand}
+                placeholder="Діаметр шини"
+                onChange={(event) => changeInputDiametr(event.target.value)}
+                value={inputDiametr}
               />
               <input
                 className="search__form--input"
                 type="text"
                 id="model"
                 data-model
-                placeholder="Модель"
-                onChange={(event) => changeInputModel(event.target.value)}
-                value={inputModel}
+                placeholder="Ширина шини"
+                onChange={(event) => changeInputWidth(event.target.value)}
+                value={inputWidth}
               />
               <input
                 className="search__form--input"
                 type="text"
                 id="item"
                 data-item
-                placeholder="Об'єм двигуна"
-                onChange={(event) => changeInputEngineValue(event.target.value)}
-                value={inputEngineValue}
-              />
-              <input
-                className="search__form--input"
-                type="text"
-                id="article"
-                data-article
-                placeholder="Артикул"
-                onChange={(event) => changeInputArticle(event.target.value)}
-                value={inputArticle}
+                placeholder="Висота профілю"
+                onChange={(event) => changeInputProfile(event.target.value)}
+                value={inputProfile}
               />
               <button className="search__form--button" onClick={(e) => onSearch(e)}>
-                Пошук
+                Шукати шини
               </button>
             </form>
           </div>
@@ -110,18 +91,12 @@ export default function Home() {
         <div className="container">
           <div className="information__body">
             <div className="information__title">
-              <h2>Автомобільний транспорт</h2>
+              <h2>Автомобільні шини</h2>
             </div>
             <div className="information__text">
               <p>
-                Автомобіль винайшли ще в кінці дев'ятнадцятого століття і більш ста років даний
-                транспортний засіб вдосконалювався, оснащуючись кращими технологічними досягненнями.
-                З роками доступність і комфортність привели чотириколісний легковий транспорт до
-                тієї ситуації, яку можна спостерігати зараз. Машини в сучасному світі - це найбільш
-                популярний вид транспорту. У нашій країні на кожну тисячу жителів доводиться більше
-                двох сотень автомобілів і ця цифра з кожним роком зростає. Природно, що в такій
-                ситуації зростає попит на автомобільні деталі, адже машина - річ матеріальна, а тому
-                поломки час від часу трапляються.
+                Той, хто цінує свій час, береже автомобіль і хоче недорого купити хорошу автогуму, розуміє, що покупка покришок повинна відбуватися в магазині з високою репутацією. Тут запропонують якісний сервіс при виборі та купівлі виробів. Підтримуючи бажання наших клієнтів, ми зробили все можливе, щоб купувати шини в інтернет магазині " Шини та Диски " було зручно, легко і безпечно.
+                Ми не перший рік працюємо на ринку, тому встигли виробити певну стратегію для успішної співпраці з різними клієнтами. Для цього у нас є ряд переваг, які відрізняють наш інтернет-магазин від більшості подібних ресурсів
               </p>
             </div>
           </div>
@@ -217,10 +192,7 @@ export default function Home() {
             <div className="service__items">
               <div className="service__item">
                 <div className="service__item--logo">
-                  <picture>
-                    <source srcSet={truckWebp} type="image/webp" />
-                    <img src={truckPng} alt="truck" />
-                  </picture>
+                  1
                 </div>
                 <div className="service__item--info">
                   <h3 className="service__item--title">Доставка по Україні</h3>
@@ -230,10 +202,7 @@ export default function Home() {
 
               <div className="service__item">
                 <div className="service__item--logo">
-                  <picture>
-                    <source srcSet={updateWebp} type="image/webp" />
-                    <img src={updatePng} alt="update" />
-                  </picture>
+                  2
                 </div>
                 <div className="service__item--info">
                   <h3 className="service__item--title">Гарантия повернення</h3>
@@ -245,10 +214,7 @@ export default function Home() {
             <div className="service__items">
               <div className="service__item">
                 <div className="service__item--logo">
-                  <picture>
-                    <source srcSet={headPhonesWebp} type="image/webp" />
-                    <img src={headPhonesPng} alt="headphones" />
-                  </picture>
+                  3
                 </div>
                 <div className="service__item--info">
                   <h3 className="service__item--title">Підбір запчастин</h3>
@@ -258,10 +224,7 @@ export default function Home() {
 
               <div className="service__item">
                 <div className="service__item--logo">
-                  <picture>
-                    <source srcSet={giftWebp} type="image/webp" />
-                    <img src={giftPng} alt="gift" />
-                  </picture>
+                  4
                 </div>
                 <div className="service__item--info">
                   <h3 className="service__item--title">Подарунки клієнтам</h3>

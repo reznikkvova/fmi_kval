@@ -1,32 +1,20 @@
-import landRoverPng from '../../assets/img/landrover.png';
-import landRoverWebp from '../../assets/img/landrover.webp';
+import bridgestonePng from '../../assets/img/brand_slider/bridgestone.png';
 
-import bmwPng from '../../assets/img/bmw.png';
-import bmwWebp from '../../assets/img/bmw.webp';
+import continentalPng from '../../assets/img/brand_slider/continental.png';
 
-import AudiPng from '../../assets/img/audi.png';
-import AudiWebp from '../../assets/img/audi.webp';
+import debicaPng from '../../assets/img/brand_slider/debica.png';
 
-import porshePng from '../../assets/img/porshe.png';
-import porsheWebp from '../../assets/img/porshe.webp';
+import goodyearPng from '../../assets/img/brand_slider/goodyear.png';
 
-import mersedesPng from '../../assets/img/mersedes.png';
-import mersedesWebp from '../../assets/img/mersedes.webp';
+import hankookPng from '../../assets/img/brand_slider/hankook.png';
 
-import vwPng from '../../assets/img/vw.png';
-import vwWebp from '../../assets/img/vw.webp';
+import michelinPng from '../../assets/img/brand_slider/michelin.png';
 
 export {
-  landRoverPng,
-  landRoverWebp,
-  bmwPng,
-  bmwWebp,
-  AudiPng,
-  AudiWebp,
-  porshePng,
-  porsheWebp,
-  mersedesPng,
-  mersedesWebp,
-  vwPng,
-  vwWebp,
+  bridgestonePng,
+  continentalPng,
+  debicaPng,
+  goodyearPng,
+  hankookPng,
+  michelinPng,
 };

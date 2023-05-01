@@ -15,7 +15,7 @@ import {
   headerPhoneWebp,
 } from './images';
 
-const categoryNames = ['Головна', 'Запчастини', 'Про нас', 'Контакти'];
+const categoryNames = ['', 'Пошук шин', 'Про нас', 'Контакти'];
 
 export default function Header() {
   const auth = useContext(AuthContext);
@@ -45,10 +45,7 @@ export default function Header() {
       <div className="container">
         <div className="header__body">
           <div className="header__logo">
-            <picture>
-              <source srcSet={logoWebp} type="image/webp" />
               <img src={logoPng} alt="logo" />
-            </picture>
           </div>
           {window.innerWidth < 992 ? (
             <div className="header__adaptive">
@@ -56,14 +53,6 @@ export default function Header() {
                 <i className="fas fa-shopping-cart"></i>
                 {totalCount !== 0 ? <span className="cart-counter">{totalCount}</span> : ''}
               </Link>
-              <div className="header__phoneburger">
-                <a href="tel:12345678 ">
-                  <picture>
-                    <source srcSet={phoneBurgerWebp} type="image/webp" />
-                    <img src={phoneBurgerPng} alt="burger-phone" />
-                  </picture>
-                </a>
-              </div>
               <div
                 className={visibleBurger ? 'header__burger active' : 'header__burger'}
                 onClick={toggleVisibleBurger}>
@@ -87,28 +76,23 @@ export default function Header() {
                         className={
                           category === index ? 'header__link link--active' : 'header__link'
                         }>
-                        {categoryName}
+                        {categoryName === '' ? 'Головна' : categoryName}
                       </Link>
                     </li>
                   ))}
 
-                <li className="header__list--phone">
-                  <a
-                    title="Зв'язатись по телефону"
-                    href="tel:38 050 505 50 05"
-                    className="header__link header__link-phone header-icon">
-                    <picture>
-                      <source srcSet={headerPhoneWebp} type="image/webp" />
-                      <img src={headerPhonePng} alt="phone-logo" />
-                    </picture>
-                  </a>
-                  <i
-                    className="fas fa-sign-out-alt header-icon"
-                    title="Вийти з аккаунту"
-                    onClick={logoutHandler}></i>
+                <li className="header__list--actions">
+                  {auth.isAuthenticated ? <Link to="/account" onClick={() => onSelectCategory(null)} className="header__link">
+                        Аккаунт
+                      </Link> :
+                      <Link to="/login" onClick={() => onSelectCategory(null)} className="header__link">
+                        Увійти
+                      </Link>
+                  }
+
                   <Link to="/корзина" onClick={() => onSelectCategory(null)} className="cart-icon">
                     <i className="fas fa-shopping-cart header-icon" title="Перейти до корзини"></i>
-                    {totalCount !== 0 ? <span className="cart-counter">{totalCount}</span> : ''}
+                    {totalCount === 0 ? <span className="cart-counter">{totalCount}</span> : ''}
                   </Link>
                 </li>
               </ul>

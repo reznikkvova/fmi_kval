@@ -3,22 +3,15 @@ import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 
 import {
-  landRoverPng,
-  landRoverWebp,
-  bmwPng,
-  bmwWebp,
-  AudiPng,
-  AudiWebp,
-  porshePng,
-  porsheWebp,
-  mersedesPng,
-  mersedesWebp,
-  vwPng,
-  vwWebp,
+  bridgestonePng,
+  continentalPng,
+  debicaPng,
+  goodyearPng,
+  hankookPng,
+  michelinPng,
 } from './images';
 
-const brandsPng = [landRoverPng, bmwPng, AudiPng, porshePng, mersedesPng, vwPng];
-const brandsWebp = [landRoverWebp, bmwWebp, AudiWebp, porsheWebp, mersedesWebp, vwWebp];
+const brandsPng = [bridgestonePng, continentalPng, debicaPng, goodyearPng, hankookPng, michelinPng];
 
 export default class BrandsSlider extends Component {
   render() {
@@ -78,54 +71,13 @@ export default class BrandsSlider extends Component {
     };
     return (
       <section className="brands">
-        <h2>Semantic text</h2>
         <div className="container">
           <Slider className="brands__slider" {...settings}>
-            {brandsPng.map((brand, index) => (
+            {brandsPng.concat(brandsPng).map((brand, index) => (
               <div className="brands__slider--item" key={`${brand}_${index}`}>
-                <picture>
-                  <source srcSet={brand} type="image/webp" />
-                  <img src={brandsWebp[index]} alt="landrover" />
-                </picture>
+                  <img src={brand} alt={brand} />
               </div>
             ))}
-
-            <div className="brands__slider--item">
-              <picture>
-                <source srcSet={landRoverWebp} type="image/webp" />
-                <img src={landRoverPng} alt="landrover" />
-              </picture>
-            </div>
-            <div className="brands__slider--item">
-              <picture>
-                <source srcSet={bmwWebp} type="image/webp" />
-                <img src={bmwPng} alt="bmw" />
-              </picture>
-            </div>
-            <div className="brands__slider--item">
-              <picture>
-                <source srcSet={AudiPng} type="image/webp" />
-                <img src={AudiWebp} alt="audi" />
-              </picture>
-            </div>
-            <div className="brands__slider--item">
-              <picture>
-                <source srcSet={porsheWebp} type="image/webp" />
-                <img src={porshePng} alt="porshe" />
-              </picture>
-            </div>
-            <div className="brands__slider--item">
-              <picture>
-                <source srcSet={mersedesWebp} type="image/webp" />
-                <img src={mersedesPng} alt="mersedes" />
-              </picture>
-            </div>
-            <div className="brands__slider--item">
-              <picture>
-                <source srcSet={vwWebp} type="image/webp" />
-                <img src={vwPng} alt="vw" />
-              </picture>
-            </div>
           </Slider>
         </div>
       </section>
@@ -135,10 +87,8 @@ export default class BrandsSlider extends Component {
 
 BrandsSlider.propTypes = {
   brandsPng: PropTypes.array,
-  brandsWebp: PropTypes.array,
 };
 
 BrandsSlider.defaultProps = {
   brandsPng: [],
-  brandsWebp: [],
 };

@@ -10,16 +10,12 @@ import Cart from './pages/Cart';
 import AuthPage from './pages/Auth';
 
 export const useRoutes = (isAuthenticated) => {
-  if (isAuthenticated) {
     return (
       <Switch>
         <>
           <Header />
           <div className="content">
             <Route exact path="/">
-              <Redirect to="/головна" />
-            </Route>
-            <Route exact path="/головна">
               <Home />
             </Route>
             <Route exact path="/запчастини">
@@ -34,18 +30,12 @@ export const useRoutes = (isAuthenticated) => {
             <Route exact path="/корзина">
               <Cart />
             </Route>
+              <Route path="/login" exact>
+                  <AuthPage />
+              </Route>
           </div>
           <Footer />
         </>
       </Switch>
     );
-  }
-  return (
-    <Switch>
-      <Route path="/" exact>
-        <AuthPage />
-      </Route>
-      <Redirect to="/" />
-    </Switch>
-  );
 };
