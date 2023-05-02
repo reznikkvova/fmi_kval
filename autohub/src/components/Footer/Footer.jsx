@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { footerLogoPng, footerLogoWebp } from './images';
+import { footerLogo } from './images';
 
 export default function Footer() {
     return (
@@ -8,10 +8,7 @@ export default function Footer() {
             <div className="container">
                 <div className="footer__body">
                     <div className="footer__logo">
-                        <picture>
-                            <source srcSet={footerLogoWebp} type="image/webp" />
-                            <img src={footerLogoPng} alt="footer-logo" />
-                        </picture>
+                            <img src={footerLogo} alt="footer-logo" />
                     </div>
 
                     <div className="footer__social">

@@ -1911,8 +1911,7 @@ li.li--active {
   margin: 0;
 }
 .footer {
-  -webkit-box-shadow: 10px -10px 30px #ececec;
-  box-shadow: 10px -10px 30px #ececec;
+  background: black;
 }
 .footer a {
   text-decoration: none;
@@ -1934,9 +1933,11 @@ li.li--active {
 }
 .footer__logo {
   margin: 50px 0 30px;
+  height: 80px;
 }
 .footer__logo img {
   max-width: 100%;
+  max-height: 100%;
 }
 .footer__list {
   margin: 0;
@@ -2003,14 +2004,11 @@ li.li--active {
   align-items: center;
   width: 30px;
   height: 30px;
-  background: #a6a6a6;
+  background: white;
   border-radius: 50%;
 }
 .social i {
-  color: #fff;
-}
-.social i:hover {
-  color: #fcef3a;
+  color: #FF3600;
 }
 .noUi-target,
 .noUi-target * {
@@ -2878,11 +2876,12 @@ li.li--active {
 }
 
 .auth-wrapper {
-  margin: 50px 0;
+  padding:  100px 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  background: black;
 }
 
 .offset-s3.auth-wrapper h1 {
@@ -2894,8 +2893,11 @@ li.li--active {
 }
 
 .auth-wrapper span {
+  font-family: Montserrat;
   font-size: 24px;
-  color: #fff;
+  margin-bottom: 16px;
+  color: white;
+  font-weight: 500;
 }
 .auth-wrapper h1 {
   color: #6f6e6e;
@@ -2905,12 +2907,22 @@ li.li--active {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  max-width: 360px;
+  max-width: 460px;
+  width: 100%;
   min-height: 100px;
-  background-color: #6f6e6e;
-  border-radius: 20px;
-  margin: 20px;
-  padding: 10px 0;
+  background-color: black;
+  border-radius: 3px;
+  margin: 20px 0;
+  padding: 20px;
+}
+.card-content > div {
+  width: 100%;
+}
+
+.card-content > div input {
+  width: 100%;
+  font-family: Montserrat;
+  margin: 10px 0;
 }
 
 .input-field input {
@@ -2926,16 +2938,22 @@ li.li--active {
   align-items: center;
 }
 .card-action button {
-  margin: 10px 20px;
-  width: 140px;
+  margin: 10px 15px;
+  width: 200px;
   height: 40px;
   outline: none;
   border: none;
-  background-color: #6f6e6e;
+  background-color: #FF3600;
   border-radius: 10px;
   font-weight: 600;
   font-family: Montserrat;
   color: #fff;
+  cursor: pointer;
+}
+.auth-wrapper > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .header-icon {
   margin: 0 10px;

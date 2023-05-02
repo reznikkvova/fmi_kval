@@ -4,8 +4,10 @@ import { useHttp } from './../hooks/http.hook';
 import { useMessage } from './../hooks/message.hook';
 import { AuthContext } from './../context/AuthContext';
 import 'materialize-css';
+import {useHistory} from "react-router-dom";
 
 export default function AuthPage() {
+  const history = useHistory();
   const auth = useContext(AuthContext);
   const { loading, request, error, clearError } = useHttp();
   const message = useMessage();
@@ -14,7 +16,9 @@ export default function AuthPage() {
     password: '',
   });
   useEffect(() => {
-    message(error);
+    if(error !== null) {
+      alert(error);
+    }
     clearError();
   }, [error, message, clearError]);
   const changeHandler = (event) => {
@@ -23,19 +27,24 @@ export default function AuthPage() {
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', { ...form });
-      message(data.message);
+      if(data.message !== null) {
+        alert(data.message);
+      }
+      const _data = await request('/api/auth/login', 'POST', { ...form });
+      auth.login(_data.token, _data.userId);
+      history.push('/');
     } catch (e) {}
   };
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form });
       auth.login(data.token, data.userId);
+      history.push('/');
     } catch (e) {}
   };
   return (
     <main className="row">
       <div className="col s6 offset-s3 auth-wrapper">
-        <h1>AutoHub</h1>
         <div className="card blue darken-1">
           <div className="card-content white-text">
             <span className="card-title">Авторизація</span>

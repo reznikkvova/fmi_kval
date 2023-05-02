@@ -33,6 +33,7 @@ export const useRoutes = (isAuthenticated) => {
               <Route path="/login" exact>
                   <AuthPage />
               </Route>
+
           </div>
           <Footer />
         </>
