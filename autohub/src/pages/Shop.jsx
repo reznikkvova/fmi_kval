@@ -5,8 +5,8 @@ import { fetchDetails } from '../redux/actions/items';
 import { BreadCrumbs, SortPopup, Filter } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import ItemBlock from './../components/itemBlock/index';
-import { setSortBy } from './../redux/actions/sortBy';
-import { setCategory } from '../redux/actions/header-categories';
+import { setSortBy } from '../redux/actions/sortBy';
+
 
 import leftPag from '../assets/img/paginationleft.png';
 import rightPag from '../assets/img/paginationleft.png';
@@ -24,7 +24,6 @@ export default function Shop() {
 
   useEffect(() => {
     dispatch(fetchDetails(sortBy));
-    dispatch(setCategory(1));
     // eslint-disable-next-line
   }, [sortBy]);
 
@@ -47,7 +46,7 @@ export default function Shop() {
 
   return (
     <main>
-      <BreadCrumbs />
+      <BreadCrumbs crumbs={[{ route: '/tires', label: 'Пошук шин'}]}/>
       <section className="items-selling">
         <div className="container">
           <div className="items-selling__body">

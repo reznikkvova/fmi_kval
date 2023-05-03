@@ -1,18 +1,12 @@
 import React, { useEffect } from 'react';
 import { BreadCrumbs } from '../components';
 import { useDispatch } from 'react-redux';
-import { setCategory } from '../redux/actions/header-categories';
 
 export default function About() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setCategory(2));
-    // eslint-disable-next-line
-  }, []);
 
   return (
     <main>
-      <BreadCrumbs />
+      <BreadCrumbs crumbs={[{route: '/about-us', label: 'Про нас'}]}/>
       <section className="about">
         <div className="container">
           <div className="about__body">

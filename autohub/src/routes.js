@@ -8,6 +8,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import AuthPage from './pages/Auth';
+import Account from "./pages/Account";
 
 export const useRoutes = (isAuthenticated) => {
     return (
@@ -18,22 +19,24 @@ export const useRoutes = (isAuthenticated) => {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route exact path="/запчастини">
+            <Route exact path="/tires">
               <Shop />
             </Route>
-            <Route exact path="/про нас">
+            <Route exact path="/about-us">
               <About />
             </Route>
-            <Route exact path="/контакти">
+            <Route exact path="/contacts">
               <Contact />
             </Route>
-            <Route exact path="/корзина">
+            <Route exact path="/cart">
               <Cart />
             </Route>
               <Route path="/login" exact>
                   <AuthPage />
               </Route>
-
+              <Route exact path='/account'>
+                  {!isAuthenticated ? <Redirect to="/login" /> : <Account/> }
+              </Route>
           </div>
           <Footer />
         </>

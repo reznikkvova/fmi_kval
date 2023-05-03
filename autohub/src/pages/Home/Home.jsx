@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { NewItems, BrandsSlider } from '../../components/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchDetails } from '../../redux/actions/items';
-import { setCategory } from '../../redux/actions/header-categories';
 import { setFilter } from '../../redux/actions/filter';
 
 
@@ -28,11 +27,6 @@ export default function Home() {
     profile: inputProfile
   };
 
-  useEffect(() => {
-    dispatch(fetchDetails(sortBy));
-    dispatch(setCategory(0));
-    // eslint-disable-next-line
-  }, [sortBy]);
 
   const onSearch = (e) => {
     e.preventDefault();

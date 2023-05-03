@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'react';
-import { useHttp } from './../hooks/http.hook';
-import { useMessage } from './../hooks/message.hook';
-import { AuthContext } from './../context/AuthContext';
+import { useHttp } from '../hooks/http.hook';
+import { useMessage } from '../hooks/message.hook';
+import { AuthContext } from '../context/AuthContext';
 import 'materialize-css';
 import {useHistory} from "react-router-dom";
 

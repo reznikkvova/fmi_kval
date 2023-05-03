@@ -1,45 +1,35 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, {useCallback, useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategory } from '../../redux/actions/header-categories';
-import { AuthContext } from './../../context/AuthContext';
-import {
-  logoPng,
-  logoWebp,
-  phoneBurgerPng,
-  phoneBurgerWebp,
-  menuBurgerPng,
-  menuBurgerWebp,
-  headerPhonePng,
-  headerPhoneWebp,
-} from './images';
+import { AuthContext } from '../../context/AuthContext';
+import logoPng from '../../assets/img/logo.png';
 
-const categoryNames = ['', 'Пошук шин', 'Про нас', 'Контакти'];
+const categories = [{route: '/', label: 'Головна'}, {route: '/tires', label: 'Пошук шин'}, {route: '/contacts', label: 'Контакти'}, {route: '/about-us', label: 'Про нас'}];
 
 export default function Header() {
   const auth = useContext(AuthContext);
 
+  const location = useLocation(); // once ready it returns the 'window.location' object
+  const [url, setUrl] = useState(null);
+  useEffect(() => {
+    setUrl(location.pathname);
+  }, [location]);
+
   const dispatch = useDispatch();
   const { totalCount } = useSelector(({ cart }) => cart);
-  const { category } = useSelector(({ headerCategories }) => headerCategories);
 
-  const [visibleBurger, setVisibleBuger] = useState(false);
+  const [visibleBurger, setVisibleBurger] = useState(false);
 
   const toggleVisibleBurger = () => {
-    setVisibleBuger(!visibleBurger);
+    setVisibleBurger(!visibleBurger);
   };
 
   const onSelectCategory = useCallback((index) => {
-    setVisibleBuger(false);
-    dispatch(setCategory(index));
+    setVisibleBurger(false);
     // eslint-disable-next-line
   }, []);
 
-  const logoutHandler = (event) => {
-    event.preventDefault();
-    auth.logout();
-  };
   return (
     <header className="header">
       <div className="container">
@@ -47,50 +37,50 @@ export default function Header() {
           <div className="header__logo">
               <img src={logoPng} alt="logo" />
           </div>
-          {window.innerWidth < 992 ? (
-            <div className="header__adaptive">
-              <Link to="/корзина" className="cart-icon">
-                <i className="fas fa-shopping-cart"></i>
-                {totalCount !== 0 ? <span className="cart-counter">{totalCount}</span> : ''}
+          {window.innerWidth < 992 ?
+            <div className="header__list--actions mobile">
+              <Link to="/cart" onClick={() => onSelectCategory(null)} className="cart-icon">
+                <i className="fas fa-shopping-cart header-icon" title="Перейти до корзини"></i>
+                {totalCount === 0 ? <span className="cart-counter">{totalCount}</span> : ''}
               </Link>
               <div
                 className={visibleBurger ? 'header__burger active' : 'header__burger'}
                 onClick={toggleVisibleBurger}>
-                <picture>
-                  <source srcSet={menuBurgerWebp} type="image/webp" />
-                  <img src={menuBurgerPng} alt="burger" />
-                </picture>
+                  <div></div>
               </div>
-            </div>
-          ) : (
-            ''
-          )}
+            </div>:
+            ''}
           <div className={visibleBurger ? 'header__menu active' : 'header__menu'}>
             <nav className="header__nav">
               <ul className="header__list">
-                {categoryNames &&
-                  categoryNames.map((categoryName, index) => (
-                    <li onClick={() => onSelectCategory(index)} key={`${categoryName}_${index}`}>
+                {categories &&
+                    categories.map((category, index) => (
+                    <li onClick={() => onSelectCategory(index)} key={`${category.route}_${index}`}>
                       <Link
-                        to={categoryName.toLowerCase()}
+                        to={category.route}
                         className={
-                          category === index ? 'header__link link--active' : 'header__link'
+                          url === category.route ? 'header__link link--active' : 'header__link'
                         }>
-                        {categoryName === '' ? 'Головна' : categoryName}
+                        {category.label}
                       </Link>
                     </li>
                   ))}
 
                 <li className="header__list--actions">
-                  {auth.isAuthenticated ? <Link to="/account" onClick={() => onSelectCategory(null)} className="header__link">
+                  {auth.isAuthenticated ? <Link to="/account" onClick={() => onSelectCategory(null)}
+                                                className={
+                                                  url === '/account' ? 'header__link link--active' : 'header__link'
+                                                }>
                         Аккаунт
                       </Link> :
-                      <Link to="/login" onClick={() => onSelectCategory(null)} className="header__link">
+                      <Link to="/login" onClick={() => onSelectCategory(null)} className={
+                        url === '/login' ? 'header__link link--active' : 'header__link'
+                      }>
                         Увійти
                       </Link>
                   }
 
-                  <Link to="/корзина" onClick={() => onSelectCategory(null)} className="cart-icon">
+                  <Link to="/cart" onClick={() => onSelectCategory(null)} className="cart-icon">
                     <i className="fas fa-shopping-cart header-icon" title="Перейти до корзини"></i>
                     {totalCount === 0 ? <span className="cart-counter">{totalCount}</span> : ''}
                   </Link>

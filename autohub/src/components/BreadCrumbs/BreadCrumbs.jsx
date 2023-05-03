@@ -1,24 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
-import { breadCrumbsPng, breadCrumbsWebp } from './images';
+import breadCrumbsPng from '../../assets/img/bread-crumbs.png';
 
-const categoryNames = ['Головна', 'Запчастини', 'Про нас', 'Контакти'];
+export default function BreadCrumbs({crumbs}) {
 
-export default function BreadCrumbs() {
-  const { category } = useSelector(({ headerCategories }) => headerCategories);
   return (
     <section className="breadcrumbs">
       <div className="container">
         <div className="breadcrumbs__body">
-          <Link to="/">Головна</Link>
-          <picture>
-            <source srcSet={breadCrumbsWebp} type="image/webp" />
-            <img src={breadCrumbsPng} alt="breadcrumbs" />
-          </picture>
-          <h2>{categoryNames[category]}</h2>
+          <Link to='/'>Головна</Link>
+          {!!crumbs.length && crumbs.map(item =>
+                <Link to={item.route} className='breadcrumbs__item'>
+                  <img src={breadCrumbsPng} alt="breadcrumbs" />
+                  <h2>{item.label}</h2>
+                </Link>
+              )}
         </div>
       </div>
     </section>

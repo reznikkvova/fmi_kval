@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BreadCrumbs } from '../components';
 import { useDispatch } from 'react-redux';
-import { setCategory } from '../redux/actions/header-categories';
+
+let tg = {
+  token: "6256601842:AAHQltBgZxfoRhw4-XNFKLubhwPI0fPg8Pg",
+  chat_id: "772020446"
+}
 
 export default function Contact() {
   const dispatch = useDispatch();
@@ -10,21 +14,28 @@ export default function Contact() {
   const [inputEmail, changeInputEmail] = useState('');
   const [inputTheme, changeInputTheme] = useState('');
   const [inputText, changeInputText] = useState('');
-  useEffect(() => {
-    dispatch(setCategory(3));
-    // eslint-disable-next-line
-  }, []);
+
+  function sendMessage(text) {
+    const url = `https://api.telegram.org/bot${tg.token}/sendMessage` // The url to request
+    const obj = {
+      chat_id: tg.chat_id, // Telegram chat id
+      text: text // The text to send
+    };
+
+    const xht = new XMLHttpRequest();
+    xht.open("POST", url, true);
+    xht.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    xht.send(JSON.stringify(obj));
+  }
   const onSubmit = (event) => {
     event.preventDefault();
-    alert(
-      `Шановний ${inputName}, дякуємо Вам за зворотній зв'язок. Ваше повідомлення за темою ${inputTheme},
-  буде опрацьовано найближчим часом.
-  Очікуйте відповідь на email ${inputEmail}`,
-    );
+    const d = new Date();
+
+    sendMessage(`** Повідомлення з сайту **\n\nІм'я: ${inputName}\nТема: ${inputTheme}\nПошта: ${inputEmail}\nТелефон: ${inputPhone}\nОпис: ${inputText}\n Залишено об: ${d.getDate()}.0${d.getMonth()+1}.${d.getFullYear()}----${d.getHours()}:${d.getMinutes()}\n\n`);
   };
   return (
     <main>
-      <BreadCrumbs />
+      <BreadCrumbs crumbs={[{route: '/contacts', label: 'Контакти'}]}/>
       <section className="contact">
         <div className="container">
           <div className="contact__body">
@@ -33,10 +44,9 @@ export default function Contact() {
             </div>
             <div className="contact__descr">
               <p>
-                Якщо у вас є питання іншого характеру, будь ласка, заповніть наступну форму, щоб
+                Якщо у вас є питання, будь ласка, заповніть наступну форму, щоб
                 зв'язатися з нами.
               </p>
-              <p>Дякуємо.</p>
             </div>
             <div className="contact__wrapper">
               <form action="server.php" className="contact__form">
@@ -80,16 +90,15 @@ export default function Contact() {
                   />
                 </div>
                 <div className="contact__form--input textarea--input">
-                  <input
-                    type="text"
+                  <textarea
                     id="textarea"
                     placeholder="Повідомлення"
                     onChange={(event) => changeInputText(event.target.value)}
                     value={inputText}
-                  />
+                  ></textarea>
                 </div>
                 <div className="contact__form--button">
-                  <button onClick={(event) => onSubmit(event)}>Надіслати повідомлення </button>
+                  <button onClick={(event) => onSubmit(event)}>Надіслати</button>
                 </div>
               </form>
 
@@ -104,13 +113,13 @@ export default function Contact() {
                 <div className="contact__contacts--phones">
                   <i className="fas fa-phone-alt"></i> <span>Телефони</span>
                   <br />
-                  <a href="tel:+380973155050">
-                    + 38 097 315 50 50 <i className="fab fa-telegram"></i>
+                  <a href="tel:+380662163639">
+                    + 38 066 216 36 39 <i className="fab fa-telegram"></i>
                     <i className="fab fa-viber"></i>
                   </a>
                   <br />
-                  <a href="tel:+380973155050">
-                    + 38 093 315 50 50 <i className="fab fa-telegram"></i>
+                  <a href="tel:+380502507676">
+                    + 38 050 250 76 76 <i className="fab fa-telegram"></i>
                     <i className="fab fa-viber"></i>
                   </a>
                 </div>
