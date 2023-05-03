@@ -7,7 +7,7 @@ import logoPng from '../../assets/img/logo.png';
 
 const categories = [{route: '/', label: 'Головна'}, {route: '/tires', label: 'Пошук шин'}, {route: '/contacts', label: 'Контакти'}, {route: '/about-us', label: 'Про нас'}];
 
-export default function Header() {
+export default function Header({isAdmin}) {
   const auth = useContext(AuthContext);
 
   const location = useLocation(); // once ready it returns the 'window.location' object
@@ -34,9 +34,13 @@ export default function Header() {
     <header className="header">
       <div className="container">
         <div className="header__body">
-          <div className="header__logo">
+          {isAdmin ?
+              <Link to='/admin' className="header__logo">
+                <img src={logoPng} alt="logo" />
+              </Link>
+              : <div className="header__logo">
               <img src={logoPng} alt="logo" />
-          </div>
+          </div> }
           {window.innerWidth < 992 ?
             <div className="header__list--actions mobile">
               <Link to="/cart" onClick={() => onSelectCategory(null)} className="cart-icon">

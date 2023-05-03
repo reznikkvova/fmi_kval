@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Switch, Redirect, Route } from 'react-router';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -9,12 +9,21 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import AuthPage from './pages/Auth';
 import Account from "./pages/Account";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminPanel from "./pages/Admin/AdminPanel";
 
 export const useRoutes = (isAuthenticated) => {
+  const [admin, setAdmin] = useState(false);
+  const loginAdmin = () => {
+    setAdmin(true);
+  }
+  const logoutAdmin = () => {
+    setAdmin(false);
+  }
     return (
       <Switch>
         <>
-          <Header />
+          <Header isAdmin={admin}/>
           <div className="content">
             <Route exact path="/">
               <Home />
@@ -37,6 +46,12 @@ export const useRoutes = (isAuthenticated) => {
               <Route exact path='/account'>
                   {!isAuthenticated ? <Redirect to="/login" /> : <Account/> }
               </Route>
+            <Route exact path='/admin'>
+              {!admin ? <Redirect to="/admin-login"/> : <AdminPanel/>}
+            </Route>
+            <Route exact path='/admin-login'>
+                <AdminLogin login={loginAdmin}/>
+            </Route>
           </div>
           <Footer />
         </>

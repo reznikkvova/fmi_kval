@@ -327,6 +327,9 @@ template {
 .about__lists--list {
   padding-left: 20px;
 }
+.admin-panel {
+  margin-top: 80px;
+}
 .about__lists--list li {
   list-style: none;
   position: relative;
