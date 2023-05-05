@@ -9,21 +9,13 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import AuthPage from './pages/Auth';
 import Account from "./pages/Account";
-import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminPanel from "./pages/Admin/AdminPanel";
 
-export const useRoutes = (isAuthenticated) => {
-  const [admin, setAdmin] = useState(false);
-  const loginAdmin = () => {
-    setAdmin(true);
-  }
-  const logoutAdmin = () => {
-    setAdmin(false);
-  }
+export const useRoutes = (isAuthenticated, isAdmin) => {
     return (
       <Switch>
         <>
-          <Header isAdmin={admin}/>
+          <Header isAdmin={isAdmin}/>
           <div className="content">
             <Route exact path="/">
               <Home />
@@ -47,10 +39,8 @@ export const useRoutes = (isAuthenticated) => {
                   {!isAuthenticated ? <Redirect to="/login" /> : <Account/> }
               </Route>
             <Route exact path='/admin'>
-              {!admin ? <Redirect to="/admin-login"/> : <AdminPanel/>}
-            </Route>
-            <Route exact path='/admin-login'>
-                <AdminLogin login={loginAdmin}/>
+             {/*{isAdmin ? <AdminPanel/> : <Redirect to="/"/> }*/}
+              <AdminPanel/>
             </Route>
           </div>
           <Footer />

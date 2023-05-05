@@ -1,0 +1,150 @@
+.admin-panel {
+    padding: 60px;
+    margin: 100px auto 0;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.admin-menu {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+.admin-tabs {
+    display: flex;
+    align-items: center;
+    margin-bottom: 48px;
+}
+
+.admin-tab {
+    margin: 0 25px;
+    border: 2px solid #FF3600;
+    border-radius: 5px;
+    padding: 10px 40px;
+    background: white;
+    color: #FF3600;
+    cursor: pointer;
+    font-family: Montserrat;
+    font-size: 24px;
+}
+.admin-tab.active {
+    background: #FF3600;
+    color: white;
+}
+
+.admin-menu-title {
+    margin-bottom: 48px;
+    color: #303030;
+    font-family: Montserrat;
+    font-size: 34px;
+    font-weight: 400;
+}
+
+.admin-menu-form {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.admin-menu-label {
+    width: 40%;
+    margin: 0 2.5% 24px;
+    color: #303030;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-menu-label input {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 5px;
+    border-radius: 3px;
+    outline: none;
+    border: 2px solid #303030;
+    height: 45px;
+}
+.admin-menu-label input::placeholder {
+    color: #6f6e6e;
+}
+
+.admin-image-label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    cursor: pointer;
+}
+
+.admin-image-label input {
+    display: none;
+}
+.admin-image-label img {
+    width: 150px;
+    height: 150px;
+    margin-top: 5px;
+}
+
+.admin-menu-button {
+    padding: 10px 40px;
+    font-size: 20px;
+    cursor: pointer;
+    font-family: Montserrat;
+    color: white;
+    background: #FF3600;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    margin: 24px 2.5%;
+}
+
+.admin-menu-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.admin-menu-item {
+    padding: 15px;
+    border: 1px solid #b0a8a8;
+    display: flex;
+    margin-bottom: 30px;
+    border-radius: 15px;
+}
+
+.admin-menu-item-image {
+    width: 200px;
+    height: 200px;
+    margin-right: 50px;
+}
+
+.admin-menu-item-image img{
+    max-width: 100%;
+}
+
+.admin-menu-item-content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.admin-menu-item-content .title {
+    font-size: 24px;
+    font-family: Montserrat;
+    color: #303030;
+    font-weight: 500;
+    margin-bottom: 18px;
+}
+
+.admin-menu-item-content .speed-index, .admin-menu-item-content .season {
+    font-size: 20px;
+    font-family: Montserrat;
+    color: #303030;
+    font-weight: 400;
+    margin-bottom: 12px;
+}

@@ -13,11 +13,6 @@ export default function Account() {
         history.push('/login');
     };
 
-    useEffect(() => {
-        return () => {
-            console.log(auth)
-        };
-    }, []);
 
     return (
         <section className='account-page'>

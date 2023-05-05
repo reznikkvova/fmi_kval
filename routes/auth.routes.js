@@ -6,6 +6,7 @@ const User = require('../models/User');
 const router = Router();
 const config = require('config');
 
+
 // /api/auth/register
 router.post(
   '/register',
@@ -31,7 +32,7 @@ router.post(
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User({ email, password: hashedPassword });
+      const user = new User({ email, password: hashedPassword, isAdmin: false });
       await user.save();
 
       res.status(201).json({ message: 'User was created!' });
@@ -67,14 +68,14 @@ router.post(
       if (!isMatch) {
         return res.status(400).json({ message: 'Incorrect password, try again !' });
       }
-
       const token = jwt.sign({ userId: user.id }, config.get('jwtSecret'), { expiresIn: '1h' });
 
-      res.json({ token, userId: user.id });
+      res.json({ token, userId: user.id, isAdmin: user.isAdmin === 'true' });
     } catch (e) {
       res.status(500).json({ message: 'Error, try again' });
     }
   },
 );
+
 
 module.exports = router;

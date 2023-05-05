@@ -31,14 +31,14 @@ export default function AuthPage() {
         alert(data.message);
       }
       const _data = await request('/api/auth/login', 'POST', { ...form });
-      auth.login(_data.token, _data.userId);
+      auth.login(_data.token, _data.userId, false);
       history.push('/');
     } catch (e) {}
   };
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form });
-      auth.login(data.token, data.userId);
+      auth.login(data.token, data.userId, data.isAdmin);
       history.push('/');
     } catch (e) {}
   };

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "proxy": "http://127.0.0.1:5000/",
   "scripts": {
     "start": "node app.js",
-    "server": "nodemon app.js",
+    "server": "nodemon app.js --ignore client",
     "client": "npm run start --prefix autohub",
     "dev": "concurrently \"npm run server\" \"npm run client \""
   },
@@ -16,15 +17,18 @@
   "author": "Reznik Volodymyr <reznikvova2222@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
     "express": "^4.17.1",
     "express-validator": "^6.11.1",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.11",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.3"
+    "semantic-ui-react": "^2.0.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "concurrently": "^6.2.0",
