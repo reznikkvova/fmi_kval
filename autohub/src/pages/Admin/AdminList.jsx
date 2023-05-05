@@ -6,12 +6,30 @@ import noImage from '../../assets/img/no_img.jpg'
 
 export default function AdminList() {
     const [items, setItems] = useState([]);
+    const [update, setUpdate] = useState(false);
+
+
+    const onLoadItems = () => {
+        Axios.get('/api/crud/get-items').then((response) => {
+            setItems(response.data);
+        })
+    }
+
+    const onDeleteItem = (id) => {
+            Axios.delete(`/api/crud/delete/${id}`);
+            setUpdate(true);
+    }
 
     useEffect(() => {
-            Axios.get('/api/crud/get-items').then((response) => {
-                setItems(response.data);
-            })
+        onLoadItems()
     }, []);
+
+    useEffect(() => {
+        if(update) {
+            onLoadItems();
+            setUpdate(false)
+        }
+    }, [update]);
 
 
     return (
@@ -28,6 +46,7 @@ export default function AdminList() {
                                 <div className="title">{item.brand} {item.width}/{item.height}/{item.construction}{item.diameter}</div>
                                 <div className="speed-index">Індекс швидкості: {item.speedIndex}</div>
                                 <div className="season">Сезонність: {item.season}</div>
+                                <div className="delete-button" onClick={() => onDeleteItem(item._id)}>Delete</div>
                             </div>
                         </div>
                     ))}

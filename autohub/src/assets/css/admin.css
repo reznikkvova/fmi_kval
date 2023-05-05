@@ -148,3 +148,9 @@
     font-weight: 400;
     margin-bottom: 12px;
 }
+
+.admin-menu-item-content .delete-button {
+    background: red;
+    cursor: pointer;
+    padding: 10px;
+}

@@ -15,7 +15,7 @@ router.post('/create', async (req, res) => {
             return res.status(400).json({ message: 'Item is already registered' });
         }
         await item.save();
-        res.status(201).json({ message: 'Item was created!' });
+        return res.status(201).json({ message: 'Item was created!' });
     } catch (e) {
         console.log(e);
     }
@@ -34,6 +34,19 @@ router.get('/get-items', async (req, res) => {
         res.status(500).json({ error: 'server error' });
     }
 })
+
+router.delete('/delete/:id', async (req, res) => {
+    try{
+        console.log(req.params)
+        const item = await Tire.findByIdAndRemove(req.params.id);
+
+        return res.status(201).json({ message: 'Item was deleted!' });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ error: 'server error' });
+    }
+})
+
 
 
 module.exports = router;
