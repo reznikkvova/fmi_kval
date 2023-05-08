@@ -7,7 +7,8 @@ const app = express();
 
 app.use(express.json({ extended: true }));
 app.use('/api/auth', require('./routes/auth.routes'));
-app.use('/api/crud', require('./routes/crud.router'))
+app.use('/api/tire-crud', require('./routes/tire-crud.router'))
+app.use('/api/brand-crud', require('./routes/brand-crud.router'))
 
 
 

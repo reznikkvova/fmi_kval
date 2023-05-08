@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import AdminCreate from "./AdminCreate";
-import AdminList from "./AdminList";
+import AdminCreateTire from "./AdminCreateTire";
+import AdminListTire from "./AdminListTire";
 import clsx from "clsx";
+import AdminCreateBrand from "./AdminCreateBrand";
 
 export default function AdminPanel() {
     const [tab, setTab] = useState(0);
@@ -14,12 +15,16 @@ export default function AdminPanel() {
             <div className="admin-tabs">
                 <div className={clsx("admin-tab", tab === 0 ? 'active' : '')} onClick={() => handleSetTab(0)}>Список товарів</div>
                 <div className={clsx("admin-tab", tab === 1 ? 'active' : '')} onClick={() => handleSetTab(1)}>Створення товару</div>
+                <div className={clsx("admin-tab", tab === 2 ? 'active' : '')} onClick={() => handleSetTab(2)}>Створення виробника</div>
             </div>
             {tab === 0 ?
-                <AdminList/>
+                <AdminListTire/>
             : ''}
             {tab === 1 ?
-                <AdminCreate/>
+                <AdminCreateTire/>
+                : ''}
+            {tab === 2 ?
+                <AdminCreateBrand/>
                 : ''}
         </main>
 

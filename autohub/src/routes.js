@@ -10,6 +10,7 @@ import Cart from './pages/Cart';
 import AuthPage from './pages/Auth';
 import Account from "./pages/Account";
 import AdminPanel from "./pages/Admin/AdminPanel";
+import AdminUpdateTire from "./pages/Admin/AdminUpdateTire";
 
 export const useRoutes = (isAuthenticated, isAdmin) => {
     return (
@@ -41,6 +42,10 @@ export const useRoutes = (isAuthenticated, isAdmin) => {
             <Route exact path='/admin'>
              {/*{isAdmin ? <AdminPanel/> : <Redirect to="/"/> }*/}
               <AdminPanel/>
+            </Route>
+            <Route exact path='/admin/edit/:id'>
+             {/*{isAdmin ? <AdminPanel/> : <Redirect to="/"/> }*/}
+              <AdminUpdateTire/>
             </Route>
           </div>
           <Footer />

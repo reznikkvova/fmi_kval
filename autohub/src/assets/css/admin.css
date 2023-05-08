@@ -22,7 +22,7 @@
     margin: 0 25px;
     border: 2px solid #FF3600;
     border-radius: 5px;
-    padding: 10px 40px;
+    padding: 10px 20px;
     background: white;
     color: #FF3600;
     cursor: pointer;
@@ -59,7 +59,7 @@
     flex-direction: column;
 }
 
-.admin-menu-label input {
+.admin-menu-label input, .admin-menu-label .css-13cymwt-control {
     font-size: 18px;
     padding: 10px 20px;
     margin-top: 5px;
@@ -68,6 +68,13 @@
     border: 2px solid #303030;
     height: 45px;
 }
+.admin-menu-label .css-13cymwt-control {
+    padding: 0;
+}
+.admin-menu-label .css-qbdosj-Input {
+    height: 33px;
+}
+
 .admin-menu-label input::placeholder {
     color: #6f6e6e;
 }
@@ -115,6 +122,8 @@
     display: flex;
     margin-bottom: 30px;
     border-radius: 15px;
+    position: relative;
+    align-items: center;
 }
 
 .admin-menu-item-image {
@@ -141,7 +150,7 @@
     margin-bottom: 18px;
 }
 
-.admin-menu-item-content .speed-index, .admin-menu-item-content .season {
+.admin-menu-item-content .speed-index, .admin-menu-item-content .season, .admin-menu-item-content .year, .admin-menu-item-content .price {
     font-size: 20px;
     font-family: Montserrat;
     color: #303030;
@@ -149,8 +158,22 @@
     margin-bottom: 12px;
 }
 
-.admin-menu-item-content .delete-button {
-    background: red;
+.admin-menu-item-content .price {
+    margin: 30px 0 0 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.admin-menu-item-content .delete-button, .admin-menu-item-content .edit-button {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    padding: 5px;
+    font-size: 24px;
     cursor: pointer;
-    padding: 10px;
+    width: 30px;
+}
+
+.admin-menu-item-content .edit-button {
+    top: 80px;
 }
