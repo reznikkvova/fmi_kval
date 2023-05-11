@@ -2,114 +2,88 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from '../../redux/actions/filter';
 import line from '../../assets/img/line.png';
-import axios from 'axios';
+import Axios from 'axios';
 
-const Filter = React.memo(({ visibleFilter }) => {
-  const [carModels, setCarModels] = useState([]);
-  const [carDetails, setCarDetails] = useState([]);
+const Filter = React.memo(({ visibleFilter, handleSetSearchParams }) => {
+  const [brands, setBrands] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(`https://sheet.best/api/sheets/0f57ec51-d10e-4bb4-9c37-5efdb0a37a5a`)
-      .then(({ data }) => {
-        let modelsArray = [];
-        data.forEach((item) => {
-          if (modelsArray.indexOf(item.brand) === -1) {
-            modelsArray.push(item.brand);
-          }
-        });
+  const [form, setForm] = useState({
+    diameter: '',
+    height: '',
+    width: '',
+    season: '',
+    brand: ''
+  })
 
-        setCarModels(modelsArray);
-        setCarDetails(data.map((item) => item.name));
-      });
-  }, []);
-
-  const dispatch = useDispatch();
-  const [inputBrand, changeInputBrand] = useState('');
-  const [inputModel, changeInputModel] = useState('');
-  const [inputArticle, changeInputArticle] = useState('');
-  const [inputEngineValue, changeInputEngineValue] = useState('');
-  const [itemValue, changeItemValue] = useState('');
-  const [advanced, changeAdvanced] = useState(false);
-  const filter = useSelector(({ search }) => search.filters);
-  useEffect(() => {
-    changeInputBrand(filter.brand);
-    changeInputModel(filter.model);
-    changeInputArticle(filter.article);
-    changeInputEngineValue(filter.engine_value);
-    changeItemValue(filter.item);
-  }, [filter.article, filter.brand, filter.engine_value, filter.item, filter.model, advanced]);
-
-  const filters = {
-    brand: inputBrand,
-    model: inputModel,
-    article: inputArticle,
-    engine_value: inputEngineValue,
-    item: itemValue,
-  };
 
   const onSubmit = () => {
-    dispatch(setFilter(filters));
+    handleSetSearchParams(form);
   };
   const onClear = () => {
-    const filtersClear = {
-      brand: '',
-      model: '',
-      article: '',
-      engine_value: '',
-      item: '',
-    };
-    changeInputBrand('');
-    changeInputModel('');
-    changeInputArticle('');
-    changeInputEngineValue('');
-    changeItemValue('');
-    dispatch(setFilter(filtersClear));
+    setForm({
+      diameter: '',
+      height: '',
+      width: '',
+      season: '',
+      brand: ''
+    });
+    handleSetSearchParams(form);
   };
 
-  const onChangeItemValue = (value) => {
-    changeAdvanced(true);
-    changeItemValue(value);
+  const changeHandler = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
   };
+
+  const changeSelectedBrand = (brand) => {
+    let _cp = Object.assign({}, form);
+    if(_cp.brand === brand) {
+      _cp.brand = ''
+    } else {
+      _cp.brand = brand;
+    }
+    setForm(_cp);
+  }
+
+  useEffect(() => {
+    Axios.get('/api/brand-crud/get-items').then((response) => {
+      setBrands(response.data.data);
+    });
+  }, [])
 
   return (
     <div className={!visibleFilter ? 'filter__body ' : 'filter__body active'}>
       <div className="filter__title">
-        <h3>Підбір запчастин</h3>
+        <h3>Пошук шин</h3>
       </div>
       <form className="filter__form">
-        <p className="filter__input--name">Марка</p>
+        <p className="filter__input--name">Діаметр</p>
         <input
           className="filter__input--value"
-          type="text"
+          type="number"
           id="search-brand"
-          onChange={(event) => changeInputBrand(event.target.value)}
-          value={inputBrand}
+          onChange={changeHandler}
+          value={form.diameter}
+          name={'diameter'}
         />
-        <p className="filter__input--name">Модель</p>
+        <p className="filter__input--name">Ширина профілю</p>
         <input
           className="filter__input--value"
           type="text"
           id="search-model"
-          onChange={(event) => changeInputModel(event.target.value)}
-          value={inputModel}
+          onChange={changeHandler}
+          value={form.width}
+          name={'width'}
         />
-        <p className="filter__input--name">Артикул</p>
+        <p className="filter__input--name">Висота профілю</p>
         <input
           className="filter__input--value"
           type="text"
           id="search-article"
-          onChange={(event) => changeInputArticle(event.target.value)}
-          value={inputArticle}
+          onChange={changeHandler}
+          value={form.height}
+          name={'height'}
         />
-        <p className="filter__input--name">Об'єм двигуна</p>
-        <input
-          className="filter__input--value"
-          type="text"
-          id="search-oem"
-          onChange={(event) => changeInputEngineValue(event.target.value)}
-          value={inputEngineValue}
-        />
+
         <div id="search" className="search--button" onClick={() => onSubmit()}>
           Шукати
         </div>
@@ -122,24 +96,11 @@ const Filter = React.memo(({ visibleFilter }) => {
         </div>
 
         <div className="carmodels">
-          <h4 className="carmodels--title">Марки авто</h4>
+          <h4 className="carmodels--title">Бренди шин</h4>
           <div className="carmodels__list">
-            {carModels.map((model) => (
-              <div className="carmodels__list--item" key={model}>
-                <span onClick={() => changeInputBrand(model)}>{model}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="line">
-          <img src={line} alt="" />
-        </div>
-        <div className="carmodels">
-          <h4 className="carmodels--title custom--title">Запчастини</h4>
-          <div className="carmodels__list">
-            {carDetails.map((item) => (
-              <div className="carmodels__list--item" key={item}>
-                <span onClick={() => onChangeItemValue(item)}>{item}</span>
+            {brands && brands.map((brand) => (
+              <div className="carmodels__list--item" key={brand.id}>
+                <span className={form.brand === brand.name ? 'active' : ''} onClick={() => changeSelectedBrand(brand.name)}>{brand.name}</span>
               </div>
             ))}
           </div>

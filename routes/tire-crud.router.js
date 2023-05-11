@@ -1,13 +1,17 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
 const router = Router();
+
+
+const url = require('url');
+const querystring = require('querystring');
 const Tire = require("../models/Tire");
 
 
 
 router.post('/create', async (req, res) => {
     const {id, brand, diameter, width, height, construction, speedIndex, countAvailable, season, image, year, price} = req.body;
-    const article = brand.slice(0, 2) + diameter + width + height + construction + speedIndex + year;
+    const article = brand.slice(0, 2) + diameter + width + height + construction + year;
 
     const item = new Tire({id, brand, diameter, width, height, construction, speedIndex, countAvailable, season, image, year, price, article});
 
@@ -25,6 +29,34 @@ router.post('/create', async (req, res) => {
 router.get('/get-items', async (req, res) => {
     try{
         const items = await Tire.find();
+
+        return res.status(200).json({
+            success: true,
+            count: items.length,
+            data: items,
+        });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ error: 'server error' });
+    }
+});
+
+router.get('/get-items-sorting', async (req, res) => {
+
+    try{
+        const sortBy = req.query.sortBy;
+        const sortOrder = req.query.sortOrder;
+        const limit = Number(req.query.limit);
+        const skip = Number(req.query.skip);
+        const search = req.query.search;
+
+        const sortObj = {}; // создание объекта с параметрами сортировки
+        sortObj[sortBy] = sortOrder === 'desc' ? -1 : 1;
+
+        const _search = JSON.parse(search);
+
+
+        const items = await Tire.find(_search).skip(skip).limit(limit).sort(sortObj);
 
         return res.status(200).json({
             success: true,

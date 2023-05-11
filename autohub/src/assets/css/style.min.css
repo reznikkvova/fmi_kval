@@ -947,8 +947,8 @@ template {
 .filter__input--value {
   padding: 0 10px;
   margin: 5px 0 20px;
-  width: 257px;
-  height: 35px;
+  width: 100%;
+  height: 40px;
   background: #fff;
   border: 1px solid #898989;
   -webkit-box-sizing: border-box;
@@ -1093,7 +1093,7 @@ template {
   margin-top: 5px;
 }
 .carmodels span {
-  padding: 2px 4px;
+  padding: 3px 5px;
   width: 71px;
   height: 17px;
   background: #fff;
@@ -1104,11 +1104,18 @@ template {
   font-family: Montserrat;
   font-style: normal;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 14px;
+  font-size: 16px;
+  line-height: 16px;
   text-align: center;
   color: #898989;
+  transition: ease 0.3s;
   cursor: pointer;
+}
+
+.carmodels span.active {
+  transition: ease 0.3s;
+  background: #b1b1b1;
+  color: white;
 }
 
 .carmodels--title {
@@ -1556,6 +1563,8 @@ template {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  padding: 15px;
+  position: relative;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
@@ -1615,9 +1624,9 @@ template {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
+  -webkit-box-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
@@ -1631,7 +1640,7 @@ template {
   box-sizing: border-box;
   font-family: Montserrat;
   font-weight: 700;
-  font-size: 16.5px;
+  font-size: 24px;
   line-height: 22px;
   text-align: center;
   color: #717171;
@@ -1640,7 +1649,7 @@ template {
 .item-list__item--price {
   font-family: Montserrat;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 26px;
   line-height: 26px;
   text-align: center;
   color: #47443f;
@@ -1653,12 +1662,15 @@ template {
   font-family: Montserrat;
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  margin: 20px 0;
+  font-size: 20px;
+  line-height: 23px;
+  margin: 10px 0 0;
   color: #717171;
 }
 .item-list__item--button {
+  right: 15px;
+  top: 45px;
+  position: absolute;
   margin: 10px 0 0;
   background: #fcef3a;
   border-radius: 7px;
@@ -1698,12 +1710,13 @@ template {
   font-family: Montserrat;
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 20px;
+  line-height: 23px;
   color: #717171;
+  margin-top: 40px;
 }
 .item-list__item--article span {
-  color: #000;
+  color: #505050;
 }
 .item-list__pagination {
   margin: 60px 0 0;
@@ -1725,7 +1738,8 @@ template {
 .item-list__pagination img {
   margin: 0 20px;
 }
-.item-list__pagination a {
+.item-list__pagination div {
+  cursor: pointer;
   margin: 0 20px;
   text-decoration: none;
   font-family: Montserrat;
@@ -1735,7 +1749,7 @@ template {
   line-height: 36px;
   color: #878787;
 }
-.item-list__pagination a.active--pagination {
+.item-list__pagination div.active--pagination {
   color: #47443f;
 }
 .fas {
@@ -2637,7 +2651,7 @@ li.li--active {
   .special--info:nth-child(3) {
     display: none;
   }
-  .item-list__pagination a {
+  .item-list__pagination div {
     margin: 0 10px;
     font-size: 20px;
   }

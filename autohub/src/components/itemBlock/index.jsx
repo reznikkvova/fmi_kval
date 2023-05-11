@@ -3,19 +3,10 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 function ItemBlock({
-  id,
-  name,
-  imageUrl,
-  brand,
-  model,
-  price,
-  year,
-  volume,
-  article,
-  onClickAddItem,
+     id, brand, diameter, width, height, construction, speedIndex, countAvailable, season, image, year, price, article, onClickAddItem,
 }) {
   const onAdditem = () => {
-    const obj = {
+    /*const obj = {
       id,
       name,
       imageUrl,
@@ -27,33 +18,38 @@ function ItemBlock({
       article,
     };
     onClickAddItem(obj);
-    setCartStatus(true);
+    setCartStatus(true);*/
   };
   const [cartStatus, setCartStatus] = useState(false);
-  const [dollar, setDollar] = useState(32);
+  const [dollar, setDollar] = useState(36);
   useEffect(() => {
     axios
       .get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
       .then(({ data }) => {
-        setDollar(data[25].rate);
+        setDollar(data[24].rate);
       });
   }, []);
+
   return (
     <div className="item-list__item">
       <div className="item-list__item--img">
-        <img src={imageUrl} alt="" />
+        <img src={image} alt="" />
       </div>
       <div className="item-list__item-wrapper">
         <div className="item-list__item--info default--info fdRow">
-          <p className="item-list__item--name">{name}</p>
+          <p className="item-list__item--name">{brand} {width}/{height}/{construction}{diameter}</p>
           <p className="item-list__item--price">
             {price} UAH <span>/ {Math.floor(price / dollar)} $</span>
           </p>
         </div>
         <div className="item-list__item--info special--info">
           <p className="item-list__item--descr">
-            {brand}, {model}, {year}, {volume}
+            Індекс швидкості: {speedIndex}
           </p>
+          <p className="item-list__item--descr">
+            Сезонність: { season}
+          </p>
+
           {cartStatus ? (
             <div className="item-list__item--button">
               <span>В корзині</span>
@@ -66,7 +62,7 @@ function ItemBlock({
         </div>
         <div className="item-list__item--info special--info special--info">
           <p className="item-list__item--article">
-            Артикул: <span>{article}</span>
+            Рік виробництва: <span>{year}</span>
           </p>
         </div>
       </div>

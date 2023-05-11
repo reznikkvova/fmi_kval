@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PropTypes } from 'prop-types';
 
-const SortPopup = ({ items, onClickSortPopup, activeSortType }) => {
+const SortPopup = ({ items, handleSelectSort, selectedSort }) => {
     const sortRef = useRef();
     const [visiblePopup, setVisiblePopup] = useState(false);
 
@@ -9,10 +9,8 @@ const SortPopup = ({ items, onClickSortPopup, activeSortType }) => {
         setVisiblePopup(!visiblePopup);
     };
 
-    const onSelectItem = (index) => {
-        if (onClickSortPopup) {
-            onClickSortPopup(index);
-        }
+    const onSelectItem = (item) => {
+        handleSelectSort(item);
         setVisiblePopup(false);
     };
 
@@ -39,7 +37,7 @@ const SortPopup = ({ items, onClickSortPopup, activeSortType }) => {
                         {items &&
                             items.map((obj, index) => (
                                 <li
-                                    className={activeSortType === obj.type ? 'li--active' : ''}
+                                    className={selectedSort.id === obj.id ? 'li--active' : ''}
                                     onClick={() => onSelectItem(obj)}
                                     key={`${obj.type}_${index}`}>
                                     {obj.name}

@@ -10,39 +10,96 @@ import { setSortBy } from '../redux/actions/sortBy';
 
 import leftPag from '../assets/img/paginationleft.png';
 import rightPag from '../assets/img/paginationleft.png';
+import Axios from "axios";
 
 export default function Shop() {
-  const dispatch = useDispatch();
-  const items = useSelector(({ details }) => details.items);
-  const filters = useSelector(({ search }) => search.filters);
-  const { sortBy } = useSelector(({ sortBy }) => sortBy);
+
+  const itemsPerPage = 2;
+
   const sortItems = [
-    { name: 'Найновіші', type: 'year', order: 'desc' },
-    { name: 'По маркам', type: 'brand', order: 'asc' },
-    { name: 'Найдешевші', type: 'price', order: 'asc' },
+    {id: '1', name: 'Найновіші', type: 'year', order: 'desc' },
+    {id: '2', name: 'Найстаріші', type: 'year', order: 'asc' },
+    {id: '3', name: 'Найдешевші', type: 'price', order: 'desc' },
+    {id: '4', name: 'Найдорожчі', type: 'price', order: 'asc' }
   ];
 
-  useEffect(() => {
-    dispatch(fetchDetails(sortBy));
-    // eslint-disable-next-line
-  }, [sortBy]);
-
-  const onSelectSortType = useCallback((type) => {
-    dispatch(setSortBy(type));
-    // eslint-disable-next-line
-  }, []);
-
   const [visibleFilter, setVisibleFilter] = useState(false);
+  const [items, setItems] = useState([]);
+  const [selectedSort, setSelectedSort] = useState(sortItems[3]);
+  const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(0);
+  const [itemsCount, setItemsCount] = useState(0);
+  const [itemsCountValue, setItemsCountValue] = useState(0);
+
+  const [searchParams, setSearchParams] = useState({});
+
+  const handleSetSearchParams = (params) => {
+    setLoading(true);
+    setSearchParams(params);
+  }
+
+  useEffect(() => {
+    if(loading) {
+      setLoading(false);
+
+      const filteredObj = Object.entries(searchParams).reduce((acc, [key, value]) => {
+        if (value !== '') {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+
+      if(Object.keys(filteredObj).length === 0) {
+         setItemsCount(itemsCountValue);
+      }
+
+      Axios.get('/api/tire-crud/get-items-sorting', {
+        params: {
+          sortBy: selectedSort.type,
+          sortOrder: selectedSort.order,
+          skip: page * itemsPerPage,
+          limit: itemsPerPage,
+          search: JSON.stringify(filteredObj)
+        }
+      }).then((response) => {
+        setItems(response.data);
+        if(Object.keys(filteredObj).length === 0) {
+          setItemsCount(itemsCountValue);
+        } else {
+          setItemsCount(response.data.count);
+        }
+
+      });
+
+
+    }
+  }, [selectedSort, page, searchParams]);
+
+  useEffect(() => {
+    Axios.get('/api/tire-crud/get-items').then((response) => {
+      setItemsCount(response.data.count);
+      setItemsCountValue(response.data.count);
+    });
+  }, [])
+
 
   const toggleVisibleFilter = () => {
     setVisibleFilter(!visibleFilter);
   };
   const handleAddItemToCart = (obj) => {
-    dispatch({
-      type: 'ADD_ITEM_CART',
-      payload: obj,
-    });
+
   };
+
+  const handleSelectSort = (item) => {
+    setSelectedSort(item);
+    setLoading(true);
+  }
+
+  const handleChangePage = (page) => {
+    setPage(page);
+    setLoading(true);
+  }
 
   return (
     <main>
@@ -50,11 +107,11 @@ export default function Shop() {
       <section className="items-selling">
         <div className="container">
           <div className="items-selling__body">
-            <Filter visibleFilter={visibleFilter} />
+            <Filter visibleFilter={visibleFilter}  handleSetSearchParams={handleSetSearchParams}/>
             <div className="item-list__body">
               <div className="item-list__filter">
                 <div className="item-list__filter--show">
-                  <p>Доступні запчастини</p>
+                  <p>Список товарів - {itemsCount}</p>
                 </div>
                 <div
                   className="item-list__filter--filter--mobile filtermobile"
@@ -63,21 +120,21 @@ export default function Shop() {
                 </div>
                 <SortPopup
                   items={sortItems}
-                  activeSortType={sortBy.type}
-                  onClickSortPopup={onSelectSortType}
+                  selectedSort={selectedSort}
+                  handleSelectSort={handleSelectSort}
                 />
               </div>
 
               <div className="item-list__wrapper fd-col">
-                {items &&
+                {items && items.data &&
                   // eslint-disable-next-line
-                  items.map((obj) => {
-                    if (
-                      obj.brand.toLowerCase().includes(filters.brand.toLowerCase()) &&
+                  items.data.map((obj) => {
+                    if (1 + 1 === 2
+                      /*obj.brand.toLowerCase().includes(filters.brand.toLowerCase()) &&
                       obj.model.toLowerCase().includes(filters.model.toLowerCase()) &&
                       obj.article.toLowerCase().includes(filters.article.toLowerCase()) &&
                       obj.volume.toLowerCase().includes(filters.engine_value.toLowerCase()) &&
-                      obj.name.toLowerCase().includes(filters.item.toLowerCase())
+                      obj.name.toLowerCase().includes(filters.item.toLowerCase())*/
                     ) {
                       return (
                         <ItemBlock key={obj.id} {...obj} onClickAddItem={handleAddItemToCart} />
@@ -87,21 +144,9 @@ export default function Shop() {
               </div>
 
               <div className="item-list__pagination">
-                <a href="/">
-                  <img src={leftPag} alt="" />
-                </a>
-                <a href="/1" className="active--pagination">
-                  1
-                </a>
-                <a href="/2">2</a>
-                <a href="/3">3</a>
-                <a href="/4">4</a>
-                <a href="/5">5</a>
-                <a href="/6">6</a>
-                <a href="/7">7</a>
-                <a href="/">
-                  <img src={rightPag} alt="" />
-                </a>
+                {Array(Math.ceil(itemsCount/itemsPerPage)).fill(1).map((el, i) =>
+                    <div className={page === i ? 'active--pagination' : ''} onClick={() => handleChangePage(i)}>{i+1}</div>
+                )}
               </div>
             </div>
           </div>
