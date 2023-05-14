@@ -1,70 +1,120 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { clearCart, removeCartItem } from '../redux/actions/cart';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import CartItem from './../components/CartItem/index';
 import cartEmptyImage from './../assets/img/empty-cart.png';
+import Axios from "axios";
+import {useAuth} from "../hooks/auth.hook";
 
-export default function Cart() {
-    const { totalPrice, totalCount, items } = useSelector(({ cart }) => cart);
-    const dispatch = useDispatch();
-    const addedItems = Object.keys(items).map((key) => {
-        return items[key].items[0];
-    });
+export default function Cart({handleRequest}) {
+    const [items, setItems] = useState([]);
+    const [cart, setCart] = useState([]);
+    const [dollar, setDollar] = useState(37);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [update, setUpdate] = useState(false);
 
+    const handleUpdate = () => {
+        setUpdate(true);
+    }
+
+    const { userId } = useAuth();
     const onClearCart = () => {
-        if (window.confirm('Ви дійсно хочете очистити кошик?')) {
-            dispatch(clearCart());
+        if(window.confirm('Ви впевнені, що хочете видалити всі товари з корзини?')) {
+            Axios.post('/api/cart/delete-all', {
+                userId: userId,
+            }).then((response) => {
+                setUpdate(true);
+                handleRequest();
+            });
         }
     };
 
     const onRemoveItem = (id) => {
-        if (window.confirm('Ви дійсно хочете видалити товар?')) {
-            dispatch(removeCartItem(id));
+        if(window.confirm('Ви впевнені, що хочете видалити цей товар?')) {
+            Axios.post('/api/cart/delete', {
+                userId: userId,
+                productId: id
+            }).then((response) => {
+                setUpdate(true);
+                handleRequest();
+            });
         }
     };
 
     const onClickOrder = () => {
         console.log('ВАШ ЗАКАЗ', items);
     };
+
+    useEffect(() => {
+        if(userId !== null) {
+            Axios.get('/api/cart/get-items', {
+                params: {
+                    userId: userId
+                }
+            }).then((response) => {
+                const _cart = response.data.cart;
+                const _items = response.data.items
+                setCart(_cart);
+                setItems(_items);
+
+                if(_cart.products.length > 0 ) {
+                    let sum = 0;
+                    _cart.products.forEach(item => {
+                        console.log(item)
+                        sum += Number(item.price) * Number(item.quantity);
+                    })
+                    setTotalPrice(sum);
+                }
+            });
+        }
+    }, [userId]);
+
+    useEffect(() => {
+        if(update && userId !== null) {
+            setUpdate(false);
+
+            Axios.get('/api/cart/get-items', {
+                params: {
+                    userId: userId
+                }
+            }).then((response) => {
+                const _cart = response.data.cart;
+                const _items = response.data.items
+                setCart(_cart);
+                setItems(_items);
+
+                if(_cart.products.length > 0 ) {
+                    let sum = 0;
+                    _cart.products.forEach(item => {
+                        sum += Number(item.price) * Number(item.quantity);
+                    })
+                    setTotalPrice(sum);
+                }
+            });
+        }
+
+
+    }, [update])
+
+    useEffect(() => {
+        Axios.get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
+            .then(({ data }) => {
+                setDollar(data[24].rate);
+            });
+    }, [])
+
+
+
     return (
         <>
-            {totalCount !== 0 ? (
+            {items.length !== 0 ? (
                 <div className="cart">
                     <div className="container">
                         <div className="cart__top">
                             <h2 className="content__title">
-                                <svg
-                                    width="18"
-                                    height="18"
-                                    viewBox="0 0 18 18"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6.33333 16.3333C7.06971 16.3333 7.66667 15.7364 7.66667 15C7.66667 14.2636 7.06971 13.6667 6.33333 13.6667C5.59695 13.6667 5 14.2636 5 15C5 15.7364 5.59695 16.3333 6.33333 16.3333Z"
-                                        stroke="white"
-                                        strokeWidth="1.8"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path
-                                        d="M14.3333 16.3333C15.0697 16.3333 15.6667 15.7364 15.6667 15C15.6667 14.2636 15.0697 13.6667 14.3333 13.6667C13.597 13.6667 13 14.2636 13 15C13 15.7364 13.597 16.3333 14.3333 16.3333Z"
-                                        stroke="white"
-                                        strokeWidth="1.8"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path
-                                        d="M4.78002 4.99999H16.3334L15.2134 10.5933C15.1524 10.9003 14.9854 11.176 14.7417 11.3722C14.4979 11.5684 14.1929 11.6727 13.88 11.6667H6.83335C6.50781 11.6694 6.1925 11.553 5.94689 11.3393C5.70128 11.1256 5.54233 10.8295 5.50002 10.5067L4.48669 2.82666C4.44466 2.50615 4.28764 2.21182 4.04482 1.99844C3.80201 1.78505 3.48994 1.66715 3.16669 1.66666H1.66669"
-                                        stroke="white"
-                                        strokeWidth="1.8"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
                                 Кошик
                             </h2>
                             <div className="cart__clear" onClick={onClearCart}>
+                                Очистити кошик
                                 <svg
                                     width="30"
                                     height="30"
@@ -103,42 +153,25 @@ export default function Cart() {
                             </div>
                         </div>
                         <div className="content__items">
-                            {addedItems.map((obj) => (
-                                <CartItem key={obj.id} {...obj} onRemove={onRemoveItem} />
+                            {items.map((obj) => (
+                                <CartItem handleUpdate={handleUpdate} userId={userId} key={obj.id} {...obj} quantity={cart.products.find(item => item.productId == obj.id) !== undefined ? cart.products.find(item => item.productId == obj.id).quantity : 0} dollar={dollar} onRemove={onRemoveItem} />
                             ))}
                         </div>
                         <div className="cart__bottom">
                             <div className="cart__bottom-details">
-                <span>
-                  {' '}
-                    Всього товарів: <b>{totalCount} шт.</b>{' '}
-                </span>
                                 <span>
-                  {' '}
-                                    Сума замовлення: <b>{totalPrice} гривень</b>{' '}
-                </span>
+                                    Всього товарів: <b>{cart.products.reduce((total, amount) => total + amount.quantity, 0) } шт.</b>
+                                </span>
+                                <span>
+                                    Сума замовлення: <b>{totalPrice} гривень</b>
+                                </span>
                             </div>
                             <div className="cart__bottom-buttons">
                                 <Link to="/" className="button button--outline button--add go-back-btn">
-                                    <svg
-                                        width="10"
-                                        height="17"
-                                        viewBox="0 0 8 14"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M7 13L1 6.93015L6.86175 1"
-                                            stroke="#717171"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                    </svg>
-
-                                    <span>Повернутись назад</span>
+                                    <span>Пошук шин</span>
                                 </Link>
                                 <div onClick={onClickOrder} className="pay-btn">
-                                    <span>Оплатити негайно</span>
+                                    <span>Замовити</span>
                                 </div>
                             </div>
                         </div>
@@ -151,13 +184,13 @@ export default function Cart() {
                             Кошик пустий <i>😕</i>
                         </h2>
                         <p>
-                            Ви ще не додали в кошик жодну запчастину.
+                            Ви ще не додали в кошик жодну шину.
                             <br />
-                            Щоб обрати товари, перейдіть на сторінку 'Запчастини'.
+                            Щоб обрати товари, перейдіть на сторінку 'Пошук шин'.
                         </p>
                         <img src={cartEmptyImage} alt="Empty cart" />
-                        <Link to="/головна" className="button button--black">
-                            <span>На Головну</span>
+                        <Link to="/tires" className="button button--black">
+                            <span>Перейти до покупок</span>
                         </Link>
                     </div>
                 </div>

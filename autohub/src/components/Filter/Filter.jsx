@@ -4,13 +4,13 @@ import { setFilter } from '../../redux/actions/filter';
 import line from '../../assets/img/line.png';
 import Axios from 'axios';
 
-const Filter = React.memo(({ visibleFilter, handleSetSearchParams }) => {
+const Filter = React.memo(({ visibleFilter, handleSetSearchParams, searchParams }) => {
   const [brands, setBrands] = useState([]);
 
   const [form, setForm] = useState({
-    diameter: '',
-    height: '',
-    width: '',
+    diameter: searchParams.diameter ? searchParams.diameter : '',
+    height:  searchParams.height ? searchParams.diameter : '',
+    width:  searchParams.width ? searchParams.width : '',
     season: '',
     brand: ''
   })

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Switch, Redirect, Route } from 'react-router';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -11,18 +11,49 @@ import AuthPage from './pages/Auth';
 import Account from "./pages/Account";
 import AdminPanel from "./pages/Admin/AdminPanel";
 import AdminUpdateTire from "./pages/Admin/AdminUpdateTire";
+import Axios from "axios";
+import {bool} from "prop-types";
+import {useHistory} from "react-router-dom";
 
-export const useRoutes = (isAuthenticated, isAdmin) => {
+export const useRoutes = (isAuthenticated, isAdmin, userId) => {
+    const [itemsInCart, setItemInCart] = useState(0);
+    const [params, setParams] = useState({});
+    const [searchFromHome, setSearchFromHome] = useState(false);
+
+
+    const handleSetParams = (par) => {
+        setParams(par);
+    }
+
+    const handleSetSearchFromHome = (bool) => {
+        setSearchFromHome(bool);
+    }
+
+    const handleRequest = () => {
+      Axios.get('/api/cart/get-items-count', {
+        params: {
+          userId: userId
+        }
+      }).then((response) => {
+                setItemInCart(response.data.count);
+      });
+    }
+
+    useEffect(() => {
+      if(userId !== null) {
+        handleRequest();
+      }
+    }, [userId])
     return (
       <Switch>
         <>
-          <Header isAdmin={isAdmin}/>
+          <Header isAdmin={isAdmin} itemsInCart={itemsInCart}/>
           <div className="content">
             <Route exact path="/">
-              <Home />
+              <Home handleSetParams={handleSetParams} handleSetSearchFromHome={handleSetSearchFromHome}/>
             </Route>
             <Route exact path="/tires">
-              <Shop />
+              <Shop handleRequest={handleRequest} params={params} handleSetParams={handleSetParams} searchFromHome={searchFromHome} handleSetSearchFromHome={handleSetSearchFromHome}/>
             </Route>
             <Route exact path="/about-us">
               <About />
@@ -31,7 +62,7 @@ export const useRoutes = (isAuthenticated, isAdmin) => {
               <Contact />
             </Route>
             <Route exact path="/cart">
-              <Cart />
+              <Cart handleRequest={handleRequest}/>
             </Route>
               <Route path="/login" exact>
                   <AuthPage />

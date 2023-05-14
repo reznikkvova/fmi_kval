@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { NewItems, BrandsSlider } from '../../components/index';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchDetails } from '../../redux/actions/items';
-import { setFilter } from '../../redux/actions/filter';
+import {useHistory} from "react-router-dom";
 
 
-export default function Home() {
-  const dispatch = useDispatch();
+
+export default function Home({handleSetParams, handleSetSearchFromHome}) {
   const history = useHistory();
 
-  const [inputDiametr, changeInputDiametr] = useState('');
+  const [form, setForm] = useState({
+    diameter: '',
+    height: '',
+    width: '',
+  })
 
-  const [inputWidth, changeInputWidth] = useState('');
-  const [inputProfile, changeInputProfile] = useState('');
-  const { sortBy } = useSelector(({ sortBy }) => sortBy);
-  const { items } = useSelector(({ details }) => {
-    return {
-      items: details.items,
-    };
-  });
-
-  const filters = {
-    diametr: inputDiametr,
-    width: inputWidth,
-    profile: inputProfile
+  const changeHandler = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
   };
 
 
   const onSearch = (e) => {
-    e.preventDefault();
-    history.push('/запчастини');
-    dispatch(setFilter(filters));
+    handleSetParams(form);
+    handleSetSearchFromHome(true);
+
+    history.push('/tires');
   };
   return (
     <main>
@@ -44,38 +35,38 @@ export default function Home() {
         }}>
         <div className="container">
           <div className="search__body">
-            <form action="server.php" className="search__form">
+            <form  className="search__form">
               <h3 className="search__form--title">Пошук шин</h3>
               <input
                 className="search__form--input"
                 type="text"
                 id="brand"
-                data-brand
                 placeholder="Діаметр шини"
-                onChange={(event) => changeInputDiametr(event.target.value)}
-                value={inputDiametr}
+                onChange={changeHandler}
+                value={form.diameter}
+                name={'diameter'}
               />
               <input
                 className="search__form--input"
                 type="text"
                 id="model"
-                data-model
                 placeholder="Ширина шини"
-                onChange={(event) => changeInputWidth(event.target.value)}
-                value={inputWidth}
+                onChange={changeHandler}
+                value={form.width}
+                name={'width'}
               />
               <input
                 className="search__form--input"
                 type="text"
                 id="item"
-                data-item
                 placeholder="Висота профілю"
-                onChange={(event) => changeInputProfile(event.target.value)}
-                value={inputProfile}
+                onChange={changeHandler}
+                value={form.height}
+                name={'height'}
               />
-              <button className="search__form--button" onClick={(e) => onSearch(e)}>
+              <div className="search__form--button" onClick={() => onSearch()}>
                 Шукати шини
-              </button>
+              </div>
             </form>
           </div>
         </div>
@@ -155,7 +146,7 @@ export default function Home() {
         </div>
       </section>
 
-      <NewItems newItems={items} />
+      {/*<NewItems newItems={items} />*/}
 
       <section className="information">
         <div className="container">

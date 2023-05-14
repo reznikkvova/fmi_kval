@@ -1,33 +1,55 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
+import Axios from "axios";
 
-function CartItem({ id, name, imageUrl, brand, model, price, year, volume, article, onRemove }) {
-  const handleRemoveClick = () => {
-    onRemove(id);
-  };
+function CartItem({ userId, id, quantity, brand, diameter, width, height, construction, speedIndex, countAvailable, season, image, year, price, dollar, handleUpdate, onRemove }) {
+
+  const [count, setCount] = useState(quantity);
+  const handleChangeCount = (e) => {
+    setCount(e.target.value);
+  }
+
+  const handleChangeCountInDB = () => {
+    Axios.post(`/api/cart/update/`,{
+      userId: userId,
+      productId: id,
+      quantity: count
+    }).then((response) => {
+      handleUpdate();
+    });
+  }
+
   return (
     <div className="item-list__item">
       <div className="item-list__item--img">
-        <img src={imageUrl} alt="" />
+        <img src={image} alt="" />
       </div>
       <div className="item-list__item-wrapper">
         <div className="item-list__item--info default--info fdRow">
-          <p className="item-list__item--name">{name}</p>
+          <p className="item-list__item--name">{brand} {width}/{height}/{construction}{diameter}</p>
           <p className="item-list__item--price">
-            {price} UAH <span>/ {Math.floor(price / 28)} $</span>
+            {price} UAH <span>/ {Math.floor(price / dollar)} $</span>
           </p>
         </div>
         <div className="item-list__item--info special--info">
           <p className="item-list__item--descr">
-            {brand}, {model}, {year}, {volume}
+            Індекс швидкості: {speedIndex}
           </p>
-          <div onClick={handleRemoveClick} className="item-list__item--button">
-            <span>Видалити</span>
-          </div>
+          <p className="item-list__item--descr">
+            Сезонність: { season}
+          </p>
+
+            <div className="item-list__item--button cursor" onClick={() => onRemove(id)}>
+                <span>Видалити</span>
+            </div>
+
+            <div className="item-list-counter">
+              <input type="number" onBlur={handleChangeCountInDB} onChange={handleChangeCount} value={count}/>
+            </div>
         </div>
         <div className="item-list__item--info special--info special--info">
           <p className="item-list__item--article">
-            Артикул: <span>{article}</span>
+            Рік виробництва: <span>{year}</span>
           </p>
         </div>
       </div>

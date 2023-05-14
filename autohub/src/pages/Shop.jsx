@@ -1,19 +1,13 @@
 import React, { useEffect, useCallback, useState } from 'react';
-
-import { fetchDetails } from '../redux/actions/items';
-
 import { BreadCrumbs, SortPopup, Filter } from '../components';
-import { useDispatch, useSelector } from 'react-redux';
 import ItemBlock from './../components/itemBlock/index';
-import { setSortBy } from '../redux/actions/sortBy';
-
-
-import leftPag from '../assets/img/paginationleft.png';
-import rightPag from '../assets/img/paginationleft.png';
 import Axios from "axios";
+import {useAuth} from "../hooks/auth.hook";
+import {useHistory} from "react-router-dom";
 
-export default function Shop() {
+export default function Shop({handleRequest, params, handleSetParams, searchFromHome, handleSetSearchFromHome}) {
 
+  const history = useHistory();
   const itemsPerPage = 2;
 
   const sortItems = [
@@ -28,11 +22,14 @@ export default function Shop() {
   const [selectedSort, setSelectedSort] = useState(sortItems[3]);
   const [loading, setLoading] = useState(true);
 
+
   const [page, setPage] = useState(0);
   const [itemsCount, setItemsCount] = useState(0);
-  const [itemsCountValue, setItemsCountValue] = useState(0);
 
-  const [searchParams, setSearchParams] = useState({});
+  const [searchParams, setSearchParams] = useState(params);
+  const [itemsCart, setItemsCart] = useState([])
+
+  const { token, userId } = useAuth();
 
   const handleSetSearchParams = (params) => {
     setLoading(true);
@@ -50,9 +47,6 @@ export default function Shop() {
         return acc;
       }, {});
 
-      if(Object.keys(filteredObj).length === 0) {
-         setItemsCount(itemsCountValue);
-      }
 
       Axios.get('/api/tire-crud/get-items-sorting', {
         params: {
@@ -64,31 +58,57 @@ export default function Shop() {
         }
       }).then((response) => {
         setItems(response.data);
-        if(Object.keys(filteredObj).length === 0) {
-          setItemsCount(itemsCountValue);
-        } else {
-          setItemsCount(response.data.count);
-        }
+        setItemsCount(response.data.count);
 
       });
-
+      if(searchFromHome) {
+        handleSetSearchFromHome(false);
+        handleSetParams({});
+      }
 
     }
   }, [selectedSort, page, searchParams]);
 
   useEffect(() => {
-    Axios.get('/api/tire-crud/get-items').then((response) => {
+    Axios.get('/api/tire-crud/get-items', ).then((response) => {
       setItemsCount(response.data.count);
-      setItemsCountValue(response.data.count);
     });
+
   }, [])
+
+  useEffect(() => {
+    if(userId !== null) {
+      Axios.get('/api/cart/get-items', {
+        params: {
+          userId: userId
+        }
+      }).then((response) => {
+        setItemsCart(response.data.cart.products);
+      });
+    }
+  }, [userId])
 
 
   const toggleVisibleFilter = () => {
     setVisibleFilter(!visibleFilter);
   };
-  const handleAddItemToCart = (obj) => {
+  const handleAddItemToCart = (productId, quantity = 1, price) => {
+    if(!!token) {
+      Axios.post('/api/cart/add',{
+        userId: userId,
+        productId: productId,
+        quantity: quantity,
+        price: price
+      }).then((response) => {
+        handleRequest();
+      });
 
+
+    } else {
+      if(window.confirm('Додавання товарів в корзину доступно лише після авторизації. Бажаєте авторизуватись?')) {
+        history.push('/login')
+      }
+    }
   };
 
   const handleSelectSort = (item) => {
@@ -107,7 +127,7 @@ export default function Shop() {
       <section className="items-selling">
         <div className="container">
           <div className="items-selling__body">
-            <Filter visibleFilter={visibleFilter}  handleSetSearchParams={handleSetSearchParams}/>
+            <Filter visibleFilter={visibleFilter}  handleSetSearchParams={handleSetSearchParams} searchParams={searchParams}/>
             <div className="item-list__body">
               <div className="item-list__filter">
                 <div className="item-list__filter--show">
@@ -128,19 +148,9 @@ export default function Shop() {
               <div className="item-list__wrapper fd-col">
                 {items && items.data &&
                   // eslint-disable-next-line
-                  items.data.map((obj) => {
-                    if (1 + 1 === 2
-                      /*obj.brand.toLowerCase().includes(filters.brand.toLowerCase()) &&
-                      obj.model.toLowerCase().includes(filters.model.toLowerCase()) &&
-                      obj.article.toLowerCase().includes(filters.article.toLowerCase()) &&
-                      obj.volume.toLowerCase().includes(filters.engine_value.toLowerCase()) &&
-                      obj.name.toLowerCase().includes(filters.item.toLowerCase())*/
-                    ) {
-                      return (
-                        <ItemBlock key={obj.id} {...obj} onClickAddItem={handleAddItemToCart} />
-                      );
-                    }
-                  })}
+                  items.data.map((obj) =>
+                        <ItemBlock inCart={itemsCart.some(item => item.productId == obj.id)} key={obj.id} {...obj} handleAddItemToCart={handleAddItemToCart} />
+                      )}
               </div>
 
               <div className="item-list__pagination">

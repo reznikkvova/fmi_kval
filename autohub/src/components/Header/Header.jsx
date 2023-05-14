@@ -7,7 +7,7 @@ import logoPng from '../../assets/img/logo.png';
 
 const categories = [{route: '/', label: 'Головна'}, {route: '/tires', label: 'Пошук шин'}, {route: '/contacts', label: 'Контакти'}, {route: '/about-us', label: 'Про нас'}];
 
-export default function Header({isAdmin}) {
+export default function Header({isAdmin, itemsInCart}) {
   const auth = useContext(AuthContext);
 
   const location = useLocation(); // once ready it returns the 'window.location' object
@@ -16,8 +16,6 @@ export default function Header({isAdmin}) {
     setUrl(location.pathname);
   }, [location]);
 
-  const dispatch = useDispatch();
-  const { totalCount } = useSelector(({ cart }) => cart);
 
   const [visibleBurger, setVisibleBurger] = useState(false);
 
@@ -45,7 +43,7 @@ export default function Header({isAdmin}) {
             <div className="header__list--actions mobile">
               <Link to="/cart" onClick={() => onSelectCategory(null)} className="cart-icon">
                 <i className="fas fa-shopping-cart header-icon" title="Перейти до корзини"></i>
-                {totalCount === 0 ? <span className="cart-counter">{totalCount}</span> : ''}
+                {itemsInCart !== 0 ? <span className="cart-counter">{itemsInCart}</span> : ''}
               </Link>
               <div
                 className={visibleBurger ? 'header__burger active' : 'header__burger'}
@@ -86,7 +84,7 @@ export default function Header({isAdmin}) {
 
                   <Link to="/cart" onClick={() => onSelectCategory(null)} className="cart-icon">
                     <i className="fas fa-shopping-cart header-icon" title="Перейти до корзини"></i>
-                    {totalCount === 0 ? <span className="cart-counter">{totalCount}</span> : ''}
+                    {itemsInCart !== 0 ? <span className="cart-counter">{itemsInCart}</span> : ''}
                   </Link>
                 </li>
               </ul>

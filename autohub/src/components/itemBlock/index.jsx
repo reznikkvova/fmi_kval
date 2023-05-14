@@ -3,25 +3,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 function ItemBlock({
-     id, brand, diameter, width, height, construction, speedIndex, countAvailable, season, image, year, price, article, onClickAddItem,
+     id, inCart, brand, diameter, width, height, construction, speedIndex, countAvailable, season, image, year, price, article, handleAddItemToCart,
 }) {
-  const onAdditem = () => {
-    /*const obj = {
-      id,
-      name,
-      imageUrl,
-      brand,
-      model,
-      price,
-      year,
-      volume,
-      article,
-    };
-    onClickAddItem(obj);
-    setCartStatus(true);*/
-  };
   const [cartStatus, setCartStatus] = useState(false);
   const [dollar, setDollar] = useState(36);
+  const [itemInCart, setItemInCart] = useState(inCart);
+
   useEffect(() => {
     axios
       .get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
@@ -29,6 +16,11 @@ function ItemBlock({
         setDollar(data[24].rate);
       });
   }, []);
+
+  const handleAdd = (id, quantity, price) => {
+    setItemInCart(true);
+    handleAddItemToCart(id, quantity, price);
+  }
 
   return (
     <div className="item-list__item">
@@ -49,21 +41,29 @@ function ItemBlock({
           <p className="item-list__item--descr">
             Сезонність: { season}
           </p>
-
-          {cartStatus ? (
-            <div className="item-list__item--button">
-              <span>В корзині</span>
-            </div>
-          ) : (
-            <div onClick={onAdditem} className="item-list__item--button cursor">
+          {countAvailable <= 0 ?
+              <div className="item-list__item--button cursor ended">
+                <span>Нема в наявності</span>
+              </div>
+              :
+              ''
+          }
+          {itemInCart ? <div className="item-list__item--button cursor in_cart">
+            <span>В кошику</span>
+          </div> : ''}
+        </div>
+        {!itemInCart && countAvailable > 0 ?
+            <div onClick={() => handleAdd(id, 1, price)} className="item-list__item--button cursor">
               <span>Купити</span>
             </div>
-          )}
-        </div>
+        : ''}
         <div className="item-list__item--info special--info special--info">
           <p className="item-list__item--article">
             Рік виробництва: <span>{year}</span>
           </p>
+        </div>
+        <div className="item-list_count">
+           В наявності: {countAvailable}
         </div>
       </div>
     </div>

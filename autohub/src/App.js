@@ -8,7 +8,7 @@ import { AuthContext } from './context/AuthContext';
 function App() {
   const { token, login, logout, userId, isAdmin } = useAuth();
   const isAuthenticated = !!token;
-  const routes = useRoutes(isAuthenticated, Boolean(isAdmin));
+  const routes = useRoutes(isAuthenticated, Boolean(isAdmin), userId);
 
   return (
     <AuthContext.Provider

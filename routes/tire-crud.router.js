@@ -6,6 +6,7 @@ const router = Router();
 const url = require('url');
 const querystring = require('querystring');
 const Tire = require("../models/Tire");
+const Cart = require("../models/Cart");
 
 
 
@@ -28,6 +29,8 @@ router.post('/create', async (req, res) => {
 })
 router.get('/get-items', async (req, res) => {
     try{
+        const userId = req.query.userId;
+
         const items = await Tire.find();
 
         return res.status(200).json({
@@ -56,12 +59,13 @@ router.get('/get-items-sorting', async (req, res) => {
         const _search = JSON.parse(search);
 
 
-        const items = await Tire.find(_search).skip(skip).limit(limit).sort(sortObj);
+        const itemsWithoutPagination = await Tire.find(_search);
+        const itemsWithPagination = await Tire.find(_search).skip(skip).limit(limit).sort(sortObj);
 
         return res.status(200).json({
             success: true,
-            count: items.length,
-            data: items,
+            count: itemsWithoutPagination.length,
+            data: itemsWithPagination,
         });
     } catch(err) {
         console.log(err);
