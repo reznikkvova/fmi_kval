@@ -5,6 +5,7 @@ import _uniqueId from 'lodash/uniqueId';
 import noImage from '../../assets/img/no_img.jpg'
 import axios from "axios";
 import {useHistory} from "react-router-dom";
+import clsx from "clsx";
 
 
 export default function AdminListTire() {
@@ -12,7 +13,12 @@ export default function AdminListTire() {
 
     const [items, setItems] = useState([]);
     const [update, setUpdate] = useState(false);
-    const [dollar, setDollar] = useState(32);
+    const [dollar, setDollar] = useState(37);
+    const [searchValue ,setSearchValue] = useState('');
+
+    const handleChange = (event) => {
+        setSearchValue(event.target.value);
+    }
 
 
 
@@ -52,11 +58,21 @@ export default function AdminListTire() {
     return (
         <div className="admin-menu admin-create">
             <h1 className='admin-menu-title'>Список товарів ({items.count})</h1>
-            <input type="text" placeholder='Пошук'/>
+            <input type="text" placeholder='Пошук' className='admin-search-list' onChange={handleChange}/>
             {items && items.count > 0 ?
                 <div className="admin-menu-list">
                     {items.data.map(item => (
-                        <div className='admin-menu-item'>
+                        <div className={clsx('admin-menu-item', (
+                            item.brand.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.width.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.height.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.diameter.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.speedIndex.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.season.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.price.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.year.toLowerCase().includes(searchValue.toLowerCase()) ||
+                            item.construction.toLowerCase().includes(searchValue.toLowerCase())
+                        ) ? '' : 'hidden' )}>
                             <div className="admin-menu-item-image">
                                 <img src={item.image !== '' && item.image !== null ? item.image : noImage} alt="item.id"/>
                             </div>

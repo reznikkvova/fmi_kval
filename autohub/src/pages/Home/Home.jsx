@@ -202,7 +202,7 @@ export default function Home({handleSetParams, handleSetSearchFromHome}) {
                   3
                 </div>
                 <div className="service__item--info">
-                  <h3 className="service__item--title">Підбір запчастин</h3>
+                  <h3 className="service__item--title">Підбір шин</h3>
                   <p className="service__item--text">Для будь-якої моделі авто</p>
                 </div>
               </div>

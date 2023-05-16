@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setFilter } from '../../redux/actions/filter';
 import line from '../../assets/img/line.png';
 import Axios from 'axios';
 

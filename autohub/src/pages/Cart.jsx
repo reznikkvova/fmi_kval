@@ -4,6 +4,7 @@ import CartItem from './../components/CartItem/index';
 import cartEmptyImage from './../assets/img/empty-cart.png';
 import Axios from "axios";
 import {useAuth} from "../hooks/auth.hook";
+import sendMessage from "../utils/sendTG";
 
 export default function Cart({handleRequest}) {
     const [items, setItems] = useState([]);
@@ -11,20 +12,39 @@ export default function Cart({handleRequest}) {
     const [dollar, setDollar] = useState(37);
     const [totalPrice, setTotalPrice] = useState(0);
     const [update, setUpdate] = useState(false);
+    const [modal, setModal] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
+
+    const [form, setForm] = useState({
+        email: '',
+        phone: '',
+        deliveryCity: '',
+        deliveryAddress: ''
+    })
+    const changeHandler = (event) => {
+        setForm({ ...form, [event.target.name]: event.target.value });
+    };
 
     const handleUpdate = () => {
         setUpdate(true);
     }
 
     const { userId } = useAuth();
-    const onClearCart = () => {
-        if(window.confirm('Ви впевнені, що хочете видалити всі товари з корзини?')) {
+    const onClearCart = (shouldConfirm = true) => {
+        const makeRequest = () => {
             Axios.post('/api/cart/delete-all', {
                 userId: userId,
             }).then((response) => {
                 setUpdate(true);
                 handleRequest();
             });
+        }
+        if(shouldConfirm) {
+            if(window.confirm('Ви впевнені, що хочете видалити всі товари з корзини?')) {
+                makeRequest();
+            }
+        } else {
+            makeRequest();
         }
     };
 
@@ -40,9 +60,30 @@ export default function Cart({handleRequest}) {
         }
     };
 
-    const onClickOrder = () => {
-        console.log('ВАШ ЗАКАЗ', items);
+    const handleOpenModalOrder = () => {
+        setModal(true);
     };
+    const handleCloseModalOrder = (e) => {
+        if(e.target.className === 'order-modal') {
+            setModal(false);
+        }
+    };
+
+    const handleOrder = () => {
+        const d = new Date();
+        let orderedItems = [];
+
+        items.forEach(item => {
+            orderedItems.push({
+                article: item.article,
+                quantity: cart.products.find(_item => _item.productId == item.id).quantity
+            })
+        });
+        sendMessage(`** Замовлення з сайту **\n\nEmail: ${form.email}\nНомер телефону: ${form.phone}\nМісто доставки: ${form.deliveryCity}\nАдреса доставки: ${form.deliveryAddress}\nАртиклі та кількість:\n\n ${orderedItems.map(item => `${item.article} - ${item.quantity}`).join(', ')}\n\n Залишено об: ${d.getDate()}.0${d.getMonth()+1}.${d.getFullYear()}----${d.getHours()}:${d.getMinutes()}\n\n`);
+        setModal(false);
+        onClearCart(false);
+
+    }
 
     useEffect(() => {
         if(userId !== null) {
@@ -56,14 +97,30 @@ export default function Cart({handleRequest}) {
                 setCart(_cart);
                 setItems(_items);
 
+
                 if(_cart.products.length > 0 ) {
                     let sum = 0;
                     _cart.products.forEach(item => {
-                        console.log(item)
+
                         sum += Number(item.price) * Number(item.quantity);
                     })
                     setTotalPrice(sum);
                 }
+            });
+
+            Axios.get('/api/user-crud/get-user', {
+                params: {
+                    userId: userId
+                }
+            }).then((response) => {
+                const { email, phone, deliveryCity, deliveryAddress } = response.data.user;
+
+                setForm({
+                    email,
+                    phone,
+                    deliveryCity,
+                    deliveryAddress
+                })
             });
         }
     }, [userId]);
@@ -108,12 +165,38 @@ export default function Cart({handleRequest}) {
         <>
             {items.length !== 0 ? (
                 <div className="cart">
+
+                    {modal ?
+                            <div className="order-modal" onClick={(e) => handleCloseModalOrder(e)}>
+                                <div className="order-modal-body">
+                                    <div className="order-modal-title">Дані доставки</div>
+                                    <label htmlFor="email" className='admin-menu-label'>
+                                        Email:
+                                        <input type="text" disabled={true} value={form.email} id='email' name='email' placeholder='Email' />
+                                    </label>
+                                    <label htmlFor="phone" className='admin-menu-label'>
+                                        Телефон:
+                                        <input type="text" value={form.phone} id='phone' name='phone' placeholder='Телефон' onChange={changeHandler}/>
+                                    </label>
+                                    <label htmlFor="deliveryCity" className='admin-menu-label'>
+                                        Місто доставки:
+                                        <input type="text" value={form.deliveryCity} id='deliveryCity' name='deliveryCity' placeholder='Місто доставки' onChange={changeHandler}/>
+                                    </label>
+                                    <label htmlFor="deliveryAddress" className='admin-menu-label'>
+                                        Адреса доставки:
+                                        <input type="text " value={form.deliveryAddress} id='deliveryAddress' name='deliveryAddress' placeholder='Адреса доставки' onChange={changeHandler}/>
+                                    </label>
+                                    <div className="admin-menu-button admin-create-button" onClick={() => handleOrder()}> Підтвердити </div>
+                                </div>
+                            </div>
+                        : ''}
+
                     <div className="container">
                         <div className="cart__top">
                             <h2 className="content__title">
                                 Кошик
                             </h2>
-                            <div className="cart__clear" onClick={onClearCart}>
+                            <div className="cart__clear" onClick={() => onClearCart()}>
                                 Очистити кошик
                                 <svg
                                     width="30"
@@ -170,7 +253,7 @@ export default function Cart({handleRequest}) {
                                 <Link to="/" className="button button--outline button--add go-back-btn">
                                     <span>Пошук шин</span>
                                 </Link>
-                                <div onClick={onClickOrder} className="pay-btn">
+                                <div onClick={() => handleOpenModalOrder()} className="pay-btn">
                                     <span>Замовити</span>
                                 </div>
                             </div>

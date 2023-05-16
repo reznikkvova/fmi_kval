@@ -64,11 +64,11 @@ export const useRoutes = (isAuthenticated, isAdmin, userId) => {
             <Route exact path="/cart">
               <Cart handleRequest={handleRequest}/>
             </Route>
-              <Route path="/login" exact>
-                  <AuthPage />
-              </Route>
               <Route exact path='/account'>
-                  {!isAuthenticated ? <Redirect to="/login" /> : <Account/> }
+                  {!isAuthenticated ? <Redirect to="/login" /> : <Account handleRequest={handleRequest}/> }
+              </Route>
+              <Route exact path='/login'>
+                  {isAuthenticated ? <Redirect to="/account" /> : <AuthPage/> }
               </Route>
             <Route exact path='/admin'>
              {/*{isAdmin ? <AdminPanel/> : <Redirect to="/"/> }*/}

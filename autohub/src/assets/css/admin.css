@@ -177,3 +177,7 @@
 .admin-menu-item-content .edit-button {
     top: 80px;
 }
+
+.admin-menu-item.hidden {
+    display: none;
+}
