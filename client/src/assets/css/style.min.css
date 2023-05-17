@@ -2913,15 +2913,7 @@ li.li--active {
     width: 250px;
   }
 }
-.webp .search {
-  background: url(../img/background-car.webp);
-}
-.webp .slick-arrow.slick-prev {
-  background: url(../img/slider-arrow.webp) 0 0 no-repeat;
-}
-.webp .slick-arrow.slick-next {
-  background: url(../img/slider-arrow-right.webp) 0 0 no-repeat;
-}
+
 
 .items__slider--item img {
   width: 282px;

@@ -1,7 +1,6 @@
 import React, {useCallback, useState, useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Link, useLocation} from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { AuthContext } from '../../context/AuthContext';
 import logoPng from '../../assets/img/logo.png';
 

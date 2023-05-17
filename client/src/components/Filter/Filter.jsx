@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import line from '../../assets/img/line.png';
 import Axios from 'axios';
 
 const Filter = React.memo(({ visibleFilter, handleSetSearchParams, searchParams }) => {
