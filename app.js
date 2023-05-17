@@ -3,6 +3,7 @@ const config = require('config');
 const mongoose = require('mongoose');
 const PORT = config.get('port') || 5000;
 const app = express();
+const path = require('path');
 
 
 app.use(express.json({ extended: true }));
@@ -14,12 +15,12 @@ app.use('/api/user-crud', require('./routes/user-crud.router'))
 
 
 
+const prod = true;
 
-
-if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static(path.join(__dirname, 'client', 'build')));
+if (prod) {
+  app.use(express.static(path.join(__dirname, './client/build')));
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, './client/build/index.html'));
   });
 }
 
