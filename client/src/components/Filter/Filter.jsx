@@ -89,10 +89,6 @@ const Filter = React.memo(({ visibleFilter, handleSetSearchParams, searchParams 
           Очистити
         </div>
 
-        <div className="line">
-          <img src={line} alt="" />
-        </div>
-
         <div className="carmodels">
           <h4 className="carmodels--title">Бренди шин</h4>
           <div className="carmodels__list">

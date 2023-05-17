@@ -26,7 +26,7 @@ const SortPopup = ({ items, handleSelectSort, selectedSort }) => {
     }, []);
 
     return (
-        <div
+        <div className='sort-trigger'
             ref={(ref) => {
                 sortRef.current = ref;
             }}>

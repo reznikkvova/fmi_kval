@@ -8,14 +8,14 @@ const path = require('path');
 
 app.use(express.json({ extended: true }));
 app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/cart', require('./routes/cart.router'))
 app.use('/api/tire-crud', require('./routes/tire-crud.router'))
 app.use('/api/brand-crud', require('./routes/brand-crud.router'))
-app.use('/api/cart', require('./routes/cart.router'))
 app.use('/api/user-crud', require('./routes/user-crud.router'))
 
 
 
-const prod = true;
+const prod = false;
 
 if (prod) {
   app.use(express.static(path.join(__dirname, './client/build')));

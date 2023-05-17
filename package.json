@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node app.js",
     "server": "nodemon app.js --ignore client",
-    "client": "npm run start --prefix autohub",
+    "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client \""
   },
   "keywords": [

@@ -47,6 +47,9 @@ export const useRoutes = (isAuthenticated, isAdmin, userId) => {
     return (
       <Switch>
         <>
+            <div className="loading">
+
+            </div>
           <Header isAdmin={isAdmin} itemsInCart={itemsInCart}/>
           <div className="content">
             <Route exact path="/">

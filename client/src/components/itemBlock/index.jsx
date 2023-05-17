@@ -43,7 +43,7 @@ function ItemBlock({
           </p>
           {countAvailable <= 0 ?
               <div className="item-list__item--button cursor ended">
-                <span>Нема в наявності</span>
+                <span>Закінчились</span>
               </div>
               :
               ''

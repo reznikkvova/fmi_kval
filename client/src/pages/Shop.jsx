@@ -36,6 +36,12 @@ export default function Shop({handleRequest, params, handleSetParams, searchFrom
     setSearchParams(params);
   }
 
+  const handleCloseVisibleFilter = (e) => {
+    if(e.target.className === 'filter__body-overlay') {
+      setVisibleFilter(false);
+    }
+  }
+
   useEffect(() => {
     if(loading) {
       setLoading(false);
@@ -123,6 +129,7 @@ export default function Shop({handleRequest, params, handleSetParams, searchFrom
 
   return (
     <main>
+      {visibleFilter ? <div className="filter__body-overlay" onClick={(e) => handleCloseVisibleFilter(e)}></div> : ''}
       <BreadCrumbs crumbs={[{ route: '/tires', label: 'Пошук шин'}]}/>
       <section className="items-selling">
         <div className="container">
@@ -166,17 +173,13 @@ export default function Shop({handleRequest, params, handleSetParams, searchFrom
         <div className="container">
           <div className="information__body">
             <div className="information__title">
-              <h2>Як підібрати потрібну запчастину?</h2>
+              <h2>Як підібрати шини?</h2>
             </div>
             <div className="information__text">
               <p>
-                1. Підбір запчастин по VIN-коду - один з найточніших способів. Все що Вам потрібно -
-                це знати ідентифікаційний номер вашого авто, який вказаний в техпаспорті. Введіть
-                VIN-код в спеціальне поле і вибирайте потрібну автозапчастин, користуючись
-                оригінальними каталогами.
+                1. Підбір шин відносно існуючої. Параметри шини підбираються відповідно до діаметру, висоти і ширини профілю вже встановлених шин. Цей варіант дозволить Вам не переплутати розмір та купити необхідну шину.
                 <br />
-                2. Підбір автозапчастин по моделі авто. Вкажіть марку, модель, рік випуску і
-                модифікацію двигуна. Вам будуть запропоновані запчастини для Вашого автомобіля.
+                2. Підбір відносно паметрів диску. Шина підбирається виключно під параметри диску, такі як: Ширина, діаметр диску. При цьому необхідно враховувати висоту профіля, щоб колесо не терлось із аркою.
               </p>
             </div>
           </div>
