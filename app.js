@@ -15,7 +15,7 @@ app.use('/api/user-crud', require('./routes/user-crud.router'))
 
 
 
-const prod = false;
+const prod = true;
 
 if (prod) {
   app.use(express.static(path.join(__dirname, './client/build')));
