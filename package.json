@@ -2,11 +2,11 @@
   "name": "diplom",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "proxy": "http://127.0.0.1:5000/",
   "scripts": {
-    "start": "node app.js",
-    "server": "nodemon app.js --ignore client",
+    "start": "node index.js",
+    "server": "nodemon index.js --ignore client",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client \""
   },
